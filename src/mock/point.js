@@ -41,7 +41,7 @@ const mockPoint = [
   },
 ];
 
-const pointEmpty [
+const pointEmpty =
   {
     type: '',
     cityInformation:'',
@@ -50,6 +50,5 @@ const pointEmpty [
     cost:0,
     isFavorite:false,
     offers:[],
-  }
-];
+  };
 export {mockPoint, pointEmpty};
