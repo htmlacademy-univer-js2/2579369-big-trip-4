@@ -1,6 +1,6 @@
 import { points } from '../mock/point.js';
 
-export default class OffersModel {
+export default class PointModel {
   constructor(){
     this.points = points;
   }
