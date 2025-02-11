@@ -1,7 +1,7 @@
 import { dopOptions } from './offers.js';
 import { points } from './point.js';
 
-const mockPointEdit = [
+const mockPointEvent = [
   {
     type:'Flight',
     cityInformation:points[0],
@@ -9,13 +9,7 @@ const mockPointEdit = [
     dateEnd:new Date('2025-07-03'),
     cost:300,
     isFavorite:false,
-    offers:{
-      addLunguauge:dopOptions[0],
-      switchToComfortClass:dopOptions[1],
-      addMeal:dopOptions[2],
-      chooseSeats:dopOptions[3],
-      travelByTrain:dopOptions[4],
-    },
+    offers:dopOptions[0],
 
   },
   {
@@ -26,7 +20,7 @@ const mockPointEdit = [
     cost:100,
     isFavorite:false,
     offers:{
-      rentCar:dopOptions[5],
+      rentCar:dopOptions[1],
     },
   },
   {
@@ -38,13 +32,13 @@ const mockPointEdit = [
     offers:null,
   },
   {
-    type:'Bus',
+    type:'Taxi',
     cityInformation:points[3],
     dateStart:new Date('2025-00-05'),
     dateEnd:new Date('2025-25-05'),
     cost:100,
-    offers:null,
+    offers:dopOptions[2],
   },
 ];
 
-export {mockPointEdit};
+export {mockPointEvent};
