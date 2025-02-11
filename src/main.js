@@ -5,9 +5,9 @@ import BoardPresenter from './presenter/board-presenter.js';
 import {render, RenderPosition} from './render.js';
 
 import MockService from './server/mock-service.js';
-import PointEventModel from './model/point-event-model.js';
-import OffersModel from './model/offers-model.js';
 import PointModel from './model/point-model.js';
+import OffersModel from './model/offers-model.js';
+import DestinationModel from './model/destination-model.js';
 
 const bodyElemnet = document.querySelector('body');
 const headerElement = bodyElemnet.querySelector('.page-header');
@@ -17,13 +17,16 @@ const pageBodyElemnt = document.querySelector('.page-body__page-main');
 const siteBodyContainerElement = pageBodyElemnt.querySelector('.page-body__container');
 
 const mockService = new MockService();
-const pointModel = new PointModel(mockService);
-const pointEventModel = new PointEventModel(mockService);
+const destinationModel = new DestinationModel(mockService);
 const offersModel = new OffersModel(mockService);
+const pointModel = new PointModel(mockService);
 
 
 const boardPresenter = new BoardPresenter({
-  container: siteBodyContainerElement
+  container: siteBodyContainerElement,
+  destinationModel,
+  offersModel,
+  pointModel
 });
 
 render(new TripInfoView(),tripInfoElement,RenderPosition.AFTERBEGIN);

@@ -8,8 +8,11 @@ export default class BoardPresenter {
   sortComponent = new TripSortView();
   eventListComponent = new TripEventListView();
 
-  constructor({container}) {
+  constructor({container,offersModel,destinationModel,pointModel}) {
     this.container = container;
+    this.destinationModel = destinationModel;
+    this.offersModel = offersModel;
+    this.pointModel = pointModel;
   }
 
   init() {

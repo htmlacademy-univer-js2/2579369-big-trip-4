@@ -8,7 +8,7 @@ function formatDateTimeLong(date) {
   return dayjs(date).format('YYYY-MM-DDTHH:mm');
 }
 
-function isTaskExpired(dueDate) {
+function isTimeExpired(dueDate) {
   return dueDate && dayjs().isAfter(dueDate, 'D');
 }
 
@@ -23,4 +23,4 @@ function duration(dateStart,dateEnd){
   const timeDiff = dayjs(dateStart).diff(dayjs(dateEnd),'DD[D] HH[H mm[m]');
   return timeDiff;
 }
-export {getRandomArrayElement,duration, formatDateMonthDay, formatDateTimeLong,formatDateTimeShort, isTaskExpired};
+export {getRandomArrayElement,duration, formatDateMonthDay, formatDateTimeLong,formatDateTimeShort, isTimeExpired};

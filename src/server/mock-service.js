@@ -1,16 +1,16 @@
-import { points } from '../mock/point.js';
-import { mockPointEvent } from '../mock/point-event.js';
+import { destination } from '../mock/destination.js';
+import { mockPoint } from '../mock/point.js';
 import { dopOptions } from '../mock/offers.js';
 
 export default class MockService {
   constructor () {
-    this.points = points;
+    this.destination = destination;
     this.dopOptions = dopOptions;
-    this.mockPointEvent = mockPointEvent;
+    this.mockPoint = mockPoint;
   }
 
   getDestinations() {
-    return this.points;
+    return this.destination;
   }
 
   getOffers() {
@@ -18,6 +18,6 @@ export default class MockService {
   }
 
   getPoints() {
-    return this.mockPointEvent;
+    return this.mockPoint;
   }
 }

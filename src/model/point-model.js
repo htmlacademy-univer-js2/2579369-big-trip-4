@@ -1,11 +1,11 @@
-import { points } from '../mock/point.js';
+import { mockPoint } from '../mock/point.js';
 
 export default class PointModel {
-  constructor(){
-    this.points = points;
+  constructor() {
+    this.mockPoint = mockPoint;
   }
 
   get(){
-    return this.points;
+    return this.mockPoint;
   }
 }

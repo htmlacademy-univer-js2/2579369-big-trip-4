@@ -1,40 +1,42 @@
-const points = [
+import { dopOptions } from './offers.js';
+import { destination } from './destination.js';
+
+const mockPoint = [
   {
-    cityName:'Geneva',
-    destination:'Geneva is a city in Switzerland that lies at the southern tip of expansive Lac Léman (Lake Geneva). Surrounded by the Alps and Jura mountains, the city has views of dramatic Mont Blanc.',
-    photos:{
-      src1:'../img/photos/1.jpg',
-      src2:'../img/photos/2.jpg',
-      src3:'../img/photos/3.jpg',
-    }
+    type:'Flight',
+    cityInformation:destination[0],
+    dateStart:new Date('2025-06-03'),
+    dateEnd:new Date('2025-07-03'),
+    cost:300,
+    isFavorite:false,
+    offers:dopOptions[0],
+
   },
   {
-    cityName:'Chamonix',
-    destination:'Chamonix is situated in the French Alps just north of Mont Blanc, the highest mountain in Western Europe.',
-    photos:{
-      src1:'../img/photos/4.jpg',
-      src2:'../img/photos/2.jpg',
-      src3:'../img/photos/5.jpg',
-    }
+    type:'Car',
+    cityInformation:destination[1],
+    dateStart:new Date('2025-07-03'),
+    dateEnd:new Date('2025-09-03'),
+    cost:100,
+    isFavorite:false,
+    offers:dopOptions[1],
   },
   {
-    cityName:'Anapa',
-    destination:'Anapa is famous for its magnificent sandy beaches. The length of the coastline is almost 46 kilometers.',
-    photos:{
-      src1:'../img/photos/1.jpg',
-      src2:'../img/photos/3.jpg',
-      src3:'../img/photos/5.jpg',
-    }
+    type:'Train',
+    cityInformation:destination[2],
+    dateStart:new Date('2025-11-03'),
+    dateEnd:new Date('2025-09-04'),
+    cost:100,
+    offers:null,
   },
   {
-    cityName:'Abakan',
-    destination:'Abakan is the name of the capital city of the Republic of Khakassia in Russia. Situated between the Yenisei and Abakan Rivers, Abakan is part of the Minusinsk Depression.',
-    photos:{
-      src1:'../img/photos/5.jpg',
-      src2:'../img/photos/4.jpg',
-      src3:'../img/photos/2.jpg',
-    }
+    type:'Taxi',
+    cityInformation:destination[3],
+    dateStart:new Date('2025-00-05'),
+    dateEnd:new Date('2025-25-05'),
+    cost:100,
+    offers:dopOptions[2],
   },
 ];
 
-export {points};
+export {mockPoint};

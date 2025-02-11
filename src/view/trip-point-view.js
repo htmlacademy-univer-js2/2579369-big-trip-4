@@ -1,31 +1,43 @@
 import { createElement } from '../render';
+import { formatDateTimeShort } from '../utils';
+import { formatDateMonthDay } from '../utils';
 
-function createTripPointTemplate(){
+function createTripPointTemplate({point,pointDestination,pointOffers}){
+  const {
+    type,cost,isFavorite,
+    dateStart,dateEnd,offers,
+  } = point;
   // eslint-disable-next-line no-unused-expressions
   return`<li class="trip-events__item">
               <div class="event">
-                <time class="event__date" datetime="2019-03-18">MAR 18</time>
+                <time class="event__date" datetime=${formatDateMonthDay(dateStart)}>${formatDateMonthDay(dateStart)}</time>
                 <div class="event__type">
-                  <img class="event__type-icon" width="42" height="42" src="img/icons/drive.png" alt="Event type icon">
+                  <img class="event__type-icon"
+                   width="42"
+                  height="42"
+                   src="img/icons/${type}.png"
+                   alt="Event type icon">
                 </div>
-                <h3 class="event__title">Drive Chamonix</h3>
+                <h3 class="event__title">
+                ${type} ${pointDestination.cityName}
+                </h3>
                 <div class="event__schedule">
                   <p class="event__time">
-                    <time class="event__start-time" datetime="2019-03-18T14:30">14:30</time>
+                    <time class="event__start-time" datetime=${formatDateTimeShort(dateStart)}>${formatDateTimeShort(dateStart)}</time>
                     &mdash;
-                    <time class="event__end-time" datetime="2019-03-18T16:05">16:05</time>
+                    <time class="event__end-time" datetime=${formatDateTimeShort(dateEnd)}>${formatDateTimeShort(dateEnd)}</time>
                   </p>
                   <p class="event__duration">01H 35M</p>
                 </div>
                 <p class="event__price">
-                  &euro;&nbsp;<span class="event__price-value">160</span>
+                  &euro;&nbsp;<span class="event__price-value">${cost}</span>
                 </p>
                 <h4 class="visually-hidden">Offers:</h4>
                 <ul class="event__selected-offers">
                   <li class="event__offer">
-                    <span class="event__offer-title">Rent a car</span>
+                    <span class="event__offer-title">${offers}</span>
                     &plus;&euro;&nbsp;
-                    <span class="event__offer-price">200</span>
+                    <span class="event__offer-price">${pointOffers.price}</span>
                   </li>
                 </ul>
                 <button class="event__favorite-btn  event__favorite-btn--active" type="button">
@@ -42,8 +54,18 @@ function createTripPointTemplate(){
 }
 
 export default class TripPointView {
+  constructor({point,pointDestination, pointOffers}){
+    this.point = point;
+    this.pointDestination = pointDestination;
+    this.pointOffers = pointOffers;
+  }
+
   getTemplate(){
-    return createTripPointTemplate();
+    return createTripPointTemplate({
+      point:this.point,
+      pointDestination:this.pointDestination,
+      pointOffers:this.pointOffers
+    });
   }
 
   getElement(){
