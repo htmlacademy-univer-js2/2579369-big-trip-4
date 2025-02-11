@@ -1,6 +1,12 @@
 import { createElement } from '../render';
+import { pointEmpty } from '../mock/point.js';
 
-function createTripPointEditTemplate(){
+function createTripPointEditTemplate({point = pointEmpty,pointDestination,pointOffers}){
+  const {
+    type,cost,isFavorite,
+    dateStart,dateEnd,offers,
+  } = point;
+
   return`<li class="trip-events__item">
               <form class="event event--edit" action="#" method="post">
                 <header class="event__header">
@@ -166,8 +172,18 @@ function createTripPointEditTemplate(){
 }
 
 export default class TripPointEditView {
+  constructor({point, pointDestination, pointOffers}){
+    this.point = point;
+    this.pointDestination = pointDestination;
+    this.pointOffers = pointOffers;
+  }
+
   getTemplate(){
-    return createTripPointEditTemplate();
+    return createTripPointEditTemplate({
+      point: this.point,
+      pointDestination: this.pointDestination,
+      pointOffers: this.pointOffers
+    });
   }
 
   getElement(){

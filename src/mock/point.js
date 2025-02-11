@@ -27,6 +27,7 @@ const mockPoint = [
     dateStart:new Date('2025-11-03'),
     dateEnd:new Date('2025-09-04'),
     cost:100,
+    isFavorite:false,
     offers:null,
   },
   {
@@ -35,8 +36,20 @@ const mockPoint = [
     dateStart:new Date('2025-00-05'),
     dateEnd:new Date('2025-25-05'),
     cost:100,
+    isFavorite:false,
     offers:dopOptions[2],
   },
 ];
 
-export {mockPoint};
+const pointEmpty [
+  {
+    type: '',
+    cityInformation:'',
+    dateStart:null,
+    dateEnd:null,
+    cost:0,
+    isFavorite:false,
+    offers:[],
+  }
+];
+export {mockPoint, pointEmpty};
