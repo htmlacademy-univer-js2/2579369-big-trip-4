@@ -8,17 +8,33 @@ export default class BoardPresenter {
   sortComponent = new TripSortView();
   eventListComponent = new TripEventListView();
 
-  constructor({container}) {
+  constructor({container,offersModel,destinationModel,pointModel}) {
     this.container = container;
+    this.destinationModel = destinationModel;
+    this.offersModel = offersModel;
+    this.pointModel = pointModel;
+
+    this.points = [...pointModel.get()];
   }
 
   init() {
     render(this.sortComponent, this.container);
     render(this.eventListComponent,this.container);
-    render (new TripPointEditView(),this.eventListComponent.getElement());
 
-    for (let i = 0; i < 3; i++) {
-      render(new TripPointView(), this.eventListComponent.getElement());
-    }
+    render (new TripPointEditView({
+      point: this.points[0],
+    }),
+    this.eventListComponent.getElement());
+
+    this.points.forEach((point) => {
+      render(
+        new TripPointView({
+          point:point,
+          pointDestination:this.destinationModel.getByID(point.cityInformation.id),
+          pointOffers:this.offersModel.getByType(point.type) || []}
+        ),
+        this.eventListComponent.getElement()
+      );
+    });
   }
 }
