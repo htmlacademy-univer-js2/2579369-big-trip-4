@@ -1,16 +1,16 @@
-import { destination } from '../mock/destination.js';
+import { destinations } from '../mock/destination.js';
 import { points } from '../mock/point.js';
 import { dopOptions } from '../mock/offers.js';
 
 export default class MockService {
   constructor () {
-    this.destination = destination;
+    this.destinations = destinations;
     this.dopOptions = dopOptions;
     this.points = points;
   }
 
   getDestinations() {
-    return this.destination;
+    return this.destinations;
   }
 
   getOffers() {

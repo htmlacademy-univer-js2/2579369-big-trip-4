@@ -1,15 +1,18 @@
-export default class OffersModel {
-
+export default class OfferModel {
   constructor(service) {
     this.service = service;
-    this.dopOptions = this.service.getOffers();
+    this.offers = this.service.getOffers();
   }
 
-  get(){
-    return this.dopOptions;
+  get() {
+    return this.offers;
   }
 
-  getOffersByType(type) {
-    return this.dopOptions.find((option) => option.type === type) || null;
+  getByType(type) {
+    const offers = this.offers.find((option) => option.type === type);
+    if (!offers) {
+      return [];
+    }
+    return offers.offers;
   }
 }

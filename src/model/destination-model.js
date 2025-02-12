@@ -1,14 +1,14 @@
 export default class DestinationModel {
   constructor(service){
     this.service = service;
-    this.destination = this.service.getDestinations();
+    this.destinations = this.service.getDestinations();
   }
 
   get(){
-    return this.destination;
+    return this.destinations;
   }
 
   getByID(id){
-    return this.dopOptions.find((destination) => destination.id === id) || null;
+    return this.destinations.find((destination) => destination.id === id) || null;
   }
 }

@@ -5,16 +5,15 @@ import { formatDateMonthDay } from '../utils';
 
 function createTripPointTemplate({point,pointDestination,pointOffers}){
   const {
-    type,cost,isFavorite,
-    dateStart,dateEnd
+    type,cost,isFavorite,dateStart,dateEnd
   } = point;
 
   const offerItems = pointOffers && pointOffers.length > 0 ?
     pointOffers.map((offer) =>
       `<li class="event__offer">
-      <span class="event__offer-title">${offer}</span>
+      <span class="event__offer-title">${offer.title}</span>
       &plus;&euro;&nbsp;
-      <span class="event__offer-price">${pointOffers.price}</span>
+      <span class="event__offer-price">${offer.price}</span>
       </li>`
     ).join('') : '';
 
@@ -37,7 +36,7 @@ function createTripPointTemplate({point,pointDestination,pointOffers}){
                     &mdash;
                     <time class="event__end-time" datetime=${formatDateTimeShort(dateEnd)}>${formatDateTimeShort(dateEnd)}</time>
                   </p>
-                  <p class="event__duration">${dayjs(dateStart).diff(dayjs(dateEnd))}</p>
+                  <p class="event__duration">${formatDateTimeShort(dayjs(dateEnd).diff(dayjs(dateStart)))}</p>
                 </div>
                 <p class="event__price">
                   &euro;&nbsp;<span class="event__price-value">${cost}</span>

@@ -1,48 +1,52 @@
 const dopOptions = [
   {
-    id: crypto.randomUUID(),
     type:'Flight',
     offers:[
       {
+        id: crypto.randomUUID(),
         title:'Add luggage',
-        price:'30',
+        price: 30,
       },
       {
+        id: crypto.randomUUID(),
         title:'Switch to comfort class',
-        price:'100',
+        price:100,
       },
       {
+        id: crypto.randomUUID(),
         title:'Add meal',
-        price:'15',
+        price:15,
       },
       {
+        id: crypto.randomUUID(),
         title:'Choose seats',
-        price:'5',
+        price:5,
       },
       {
+        id: crypto.randomUUID(),
         title:'Travel by train',
-        price:'40',
+        price:40,
       },
     ]
 
   },
   {
-    id: crypto.randomUUID(),
     type:'Car',
     offers:[
       {
+        id: crypto.randomUUID(),
         title:'Rnet a car',
-        price:'200',
+        price:200,
       }
     ]
   },
   {
-    id: crypto.randomUUID(),
     type:'Taxi',
     offers:[
       {
+        id: crypto.randomUUID(),
         title:'Upgrade to a business class',
-        price:'120',
+        price:120,
       }
     ]
   },
