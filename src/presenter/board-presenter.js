@@ -18,7 +18,16 @@ export default class BoardPresenter {
   init() {
     render(this.sortComponent, this.container);
     render(this.eventListComponent,this.container);
-    render (new TripPointEditView(),this.eventListComponent.getElement());
+    //render (new TripPointEditView(),this.eventListComponent.getElement());
+
+    render (new TripPointEditView({
+      point: this.point[0],
+      pointDestination:this.destinationModel.get(),
+      pointOffers: this.offersModel.get()
+    }),
+    this.eventListComponent.getElement());
+
+    this.point
 
     for (let i = 0; i < 3; i++) {
       render(new TripPointView(), this.eventListComponent.getElement());

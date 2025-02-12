@@ -1,7 +1,5 @@
-import { dopOptions } from '../mock/offers.js';
-
 export default class OffersModel {
-  constructor(){
+  constructor(dopOptions){
     this.dopOptions = dopOptions;
   }
 

@@ -1,8 +1,9 @@
 import { dopOptions } from './offers.js';
 import { destination } from './destination.js';
 
-const mockPoint = [
+const mockPoints = [
   {
+    id:crypto.randomUUID(),
     type:'Flight',
     cityInformation:destination[0],
     dateStart:new Date('2025-06-03'),
@@ -13,6 +14,7 @@ const mockPoint = [
 
   },
   {
+    id:crypto.randomUUID(),
     type:'Car',
     cityInformation:destination[1],
     dateStart:new Date('2025-07-03'),
@@ -22,6 +24,7 @@ const mockPoint = [
     offers:dopOptions[1],
   },
   {
+    id:crypto.randomUUID(),
     type:'Train',
     cityInformation:destination[2],
     dateStart:new Date('2025-11-03'),
@@ -31,6 +34,7 @@ const mockPoint = [
     offers:null,
   },
   {
+    id:crypto.randomUUID(),
     type:'Taxi',
     cityInformation:destination[3],
     dateStart:new Date('2025-00-05'),
@@ -43,12 +47,12 @@ const mockPoint = [
 
 const pointEmpty =
   {
-    type: '',
-    cityInformation:'',
+    type: 'Flight',
+    cityInformation:null,
     dateStart:null,
     dateEnd:null,
     cost:0,
     isFavorite:false,
     offers:[],
   };
-export {mockPoint, pointEmpty};
+export {mockPoints, pointEmpty};

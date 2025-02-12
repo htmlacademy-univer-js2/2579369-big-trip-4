@@ -1,5 +1,6 @@
 const dopOptions = [
   {
+    id: crypto.randomUUID(),
     type:'Flight',
     offers:[
       {
@@ -26,14 +27,24 @@ const dopOptions = [
 
   },
   {
+    id: crypto.randomUUID(),
     type:'Car',
-    title:'Rnet a car',
-    price:'200',
+    offers:[
+      {
+        title:'Rnet a car',
+        price:'200',
+      }
+    ]
   },
   {
+    id: crypto.randomUUID(),
     type:'Taxi',
-    title:'Upgrade to a business class',
-    price:'120',
+    offers:[
+      {
+        title:'Upgrade to a business class',
+        price:'120',
+      }
+    ]
   },
 ];
 

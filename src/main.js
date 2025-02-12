@@ -20,6 +20,7 @@ const mockService = new MockService();
 const destinationModel = new DestinationModel(mockService);
 const offersModel = new OffersModel(mockService);
 const pointModel = new PointModel(mockService);
+//console.log(pointModel.get());
 
 
 const boardPresenter = new BoardPresenter({
