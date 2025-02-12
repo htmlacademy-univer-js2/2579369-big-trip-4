@@ -2,7 +2,7 @@ const destination = [
   {
     id: crypto.randomUUID(),
     cityName:'Geneva',
-    destination:'Geneva is a city in Switzerland that lies at the southern tip of expansive Lac Léman (Lake Geneva). Surrounded by the Alps and Jura mountains, the city has views of dramatic Mont Blanc.',
+    description:'Geneva is a city in Switzerland that lies at the southern tip of expansive Lac Léman (Lake Geneva). Surrounded by the Alps and Jura mountains, the city has views of dramatic Mont Blanc.',
     photos:[
       {
         'src': `https://loremflickr.com/248/152?random= ${crypto.randomUUID()}`,
@@ -18,7 +18,7 @@ const destination = [
   {
     id: crypto.randomUUID(),
     cityName:'Chamonix',
-    destination:'Chamonix is situated in the French Alps just north of Mont Blanc, the highest mountain in Western Europe.',
+    description:'Chamonix is situated in the French Alps just north of Mont Blanc, the highest mountain in Western Europe.',
     photos:[
       {
         'src': `https://loremflickr.com/248/152?random= ${crypto.randomUUID()}`,
@@ -39,7 +39,7 @@ const destination = [
   {
     id: crypto.randomUUID(),
     cityName:'Anapa',
-    destination:'Anapa is famous for its magnificent sandy beaches. The length of the coastline is almost 46 kilometers.',
+    description:'Anapa is famous for its magnificent sandy beaches. The length of the coastline is almost 46 kilometers.',
     photos:[
       {
         'src': `https://loremflickr.com/248/152?random= ${crypto.randomUUID()}`,
@@ -50,7 +50,7 @@ const destination = [
   {
     id: crypto.randomUUID(),
     cityName:'Abakan',
-    destination:'Abakan is the name of the capital city of the Republic of Khakassia in Russia. Situated between the Yenisei and Abakan Rivers, Abakan is part of the Minusinsk Depression.',
+    description:'Abakan is the name of the capital city of the Republic of Khakassia in Russia. Situated between the Yenisei and Abakan Rivers, Abakan is part of the Minusinsk Depression.',
     photos:[
       {
         'src': `https://loremflickr.com/248/152?random= ${crypto.randomUUID()}`,

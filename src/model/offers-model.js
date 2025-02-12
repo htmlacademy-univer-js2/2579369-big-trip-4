@@ -1,6 +1,8 @@
 export default class OffersModel {
-  constructor(dopOptions){
-    this.dopOptions = dopOptions;
+
+  constructor(service) {
+    this.service = service;
+    this.dopOptions = this.service.getOffers();
   }
 
   get(){

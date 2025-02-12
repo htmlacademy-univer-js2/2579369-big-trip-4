@@ -1,7 +1,7 @@
 import { dopOptions } from './offers.js';
 import { destination } from './destination.js';
 
-const mockPoints = [
+const points = [
   {
     id:crypto.randomUUID(),
     type:'Flight',
@@ -55,4 +55,4 @@ const pointEmpty =
     isFavorite:false,
     offers:[],
   };
-export {mockPoints, pointEmpty};
+export {points, pointEmpty};
