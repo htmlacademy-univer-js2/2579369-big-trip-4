@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
-import { createElement } from '../render';
 import { formatDateTimeShort } from '../utils';
 import { formatDateMonthDay } from '../utils';
+import AbstractView from '../framework/view/abstract-view.js';
 
 function createTripPointTemplate({point,pointDestination,pointOffers}){
   const {
@@ -58,29 +58,23 @@ function createTripPointTemplate({point,pointDestination,pointOffers}){
             </li>`;
 }
 
-export default class TripPointView {
+export default class TripPointView extends AbstractView {
+  #point = null;
+  #pointDestination = null;
+  #pointOffers = null;
+
   constructor({point,pointDestination, pointOffers}){
-    this.point = point;
-    this.pointDestination = pointDestination;
-    this.pointOffers = pointOffers;
+    super();
+    this.#point = point;
+    this.#pointDestination = pointDestination;
+    this.#pointOffers = pointOffers;
   }
 
-  getTemplate(){
+  get template(){
     return createTripPointTemplate({
-      point:this.point,
-      pointDestination:this.pointDestination,
-      pointOffers:this.pointOffers
+      point:this.#point,
+      pointDestination:this.#pointDestination,
+      pointOffers:this.#pointOffers
     });
-  }
-
-  getElement(){
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
   }
 }
