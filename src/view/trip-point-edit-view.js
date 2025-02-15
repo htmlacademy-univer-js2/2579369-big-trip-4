@@ -121,15 +121,28 @@ function createTripPointEditTemplate({point}){
 
 export default class TripPointEditView extends AbstractView{
   #point = null;
+  #onResetClick = null;
+  #onSubmitClick = null;
 
-  constructor({point = pointEmpty}){
+  constructor({point = pointEmpty, onSubmitClick}){
     super();
     this.#point = point;
+    this.onSubmitClick = onSubmitClick;
+
+    this.element
+      .querySelector('form')
+      .addEventListener('submit',this.#submitFormHandler);
   }
 
   get template(){
     return createTripPointEditTemplate({
       point: this.#point,
+
     });
   }
+
+  #submitFormHandler = (evt) => {
+    evt.preventDefault();
+    this.#onSubmitClick();
+  };
 }
