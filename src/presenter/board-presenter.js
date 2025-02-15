@@ -2,7 +2,7 @@ import TripEventListView from '../view/event-list-view.js';
 import TripSortView from '../view/trip-sort-viev.js';
 import TripPointEditView from '../view/trip-point-edit-view.js';
 import TripPointView from '../view/trip-point-view.js';
-import { render } from '../render.js';
+import { render } from '../framework/render.js';
 
 export default class BoardPresenter {
   sortComponent = new TripSortView();
@@ -24,7 +24,7 @@ export default class BoardPresenter {
     render (new TripPointEditView({
       point: this.points[0],
     }),
-    this.eventListComponent.getElement());
+    this.eventListComponent.element);
 
     this.points.forEach((point) => {
       render(
@@ -33,7 +33,7 @@ export default class BoardPresenter {
           pointDestination:this.destinationModel.getByID(point.cityInformation.id),
           pointOffers:this.offersModel.getByType(point.type) || []}
         ),
-        this.eventListComponent.getElement()
+        this.eventListComponent.element
       );
     });
   }
