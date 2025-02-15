@@ -27,20 +27,26 @@ export default class BoardPresenter {
     render(this.#sortComponent, this.#container);
     render(this.#eventListComponent,this.#container);
 
-    render (new TripPointEditView({
-      point: this.#points[0],
-    }),
-    this.#eventListComponent.element);
+    // render (new TripPointEditView({
+    //   point: this.#points[0],
+    // }),
+    // this.#eventListComponent.element);
 
     this.#points.forEach((point) => {
-      render(
-        new TripPointView({
-          point:point,
-          pointDestination:this.#destinationModel.getByID(point.cityInformation.id),
-          pointOffers:this.#offersModel.getByType(point.type) || []}
-        ),
-        this.#eventListComponent.element
-      );
+      this.#renderPoint(point,this.#destinationModel.getByID(point.cityInformation.id),this.#offersModel.getByType(point.type) || []);
     });
+  }
+
+  #renderPoint(point,pointDestination,pointOffers){
+    const pointComponent = new TripPointView({
+      point:point,
+      pointDestination:pointDestination,
+      pointOffers:pointOffers
+    });
+    const pointEditComponent = new TripPointEditView({
+      point: this.#points[0]
+    });
+
+    render(pointComponent,this.#eventListComponent.element);
   }
 }
