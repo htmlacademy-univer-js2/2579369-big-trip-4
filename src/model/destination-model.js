@@ -1,7 +1,9 @@
 export default class DestinationModel {
+  #service = null;
+
   constructor(service){
-    this.service = service;
-    this.destinations = this.service.getDestinations();
+    this.#service = service;
+    this.destinations = this.#service.getDestinations();
   }
 
   get(){
