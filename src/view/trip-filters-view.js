@@ -27,6 +27,11 @@ function createTripFiltersTemplate(){
 }
 
 export default class TripFiltersView extends AbstractView {
+
+  constructor() {
+    super();
+  }
+
   get template(){
     return createTripFiltersTemplate();
   }

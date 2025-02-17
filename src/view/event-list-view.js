@@ -5,6 +5,11 @@ function createTripEventListTemplate(){
 }
 
 export default class TripEventListView extends AbstractView {
+
+  constructor() {
+    super();
+  }
+
   get template(){
     return createTripEventListTemplate();
   }

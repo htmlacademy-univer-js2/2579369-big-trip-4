@@ -16,6 +16,11 @@ function createTripInfoTemplate(){
 }
 
 export default class TripInfoView extends AbstractView {
+
+  constructor() {
+    super();
+  }
+
   get template(){
     return createTripInfoTemplate();
   }
