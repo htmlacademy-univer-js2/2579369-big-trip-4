@@ -2,7 +2,7 @@ import TripInfoView from './view/trip-info-view';
 import TripFiltersView from './view/trip-filters-view.js';
 import BoardPresenter from './presenter/board-presenter.js';
 
-import {render, RenderPosition} from './render.js';
+import {render, RenderPosition} from './framework/render.js';
 
 import MockService from './server/mock-service.js';
 import PointModel from './model/point-model.js';
@@ -20,7 +20,6 @@ const mockService = new MockService();
 const destinationModel = new DestinationModel(mockService);
 const offersModel = new OffersModel(mockService);
 const pointModel = new PointModel(mockService);
-//console.log(pointModel.get());
 
 
 const boardPresenter = new BoardPresenter({

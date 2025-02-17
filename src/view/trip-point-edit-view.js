@@ -1,7 +1,7 @@
-import { createElement } from '../render';
 import { pointEmpty } from '../mock/point.js';
 import { destinations } from '../mock/destination.js';
 import { formatDateTimeLong } from '../utils.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 function createTripPointEditTemplate({point}){
   const {
@@ -119,25 +119,46 @@ function createTripPointEditTemplate({point}){
             </li>`;
 }
 
-export default class TripPointEditView {
-  constructor({point = pointEmpty}){
-    this.point = point;
+export default class TripPointEditView extends AbstractView{
+  #point = null;
+  #pointDestination = null;
+  #pointOffers = null;
+  #onSubmitClick = null;
+  #onResetClick = null;
+
+  constructor({point = pointEmpty, onSubmitClick,onResetClick,pointDestination,pointOffers}){
+    super();
+    this.#point = point;
+    this.#pointDestination = pointDestination;
+    this.#pointOffers = pointOffers;
+    this.#onSubmitClick = onSubmitClick;
+    this.#onResetClick = onResetClick;
+
+    this.element
+      .querySelector('.event__reset-btn')
+      .addEventListener('click',this.#resetButtonClickHandler);
+
+    this.element
+      .querySelector('form')
+      .addEventListener('submit',this.#submitFormHandler);
   }
 
-  getTemplate(){
+  get template(){
     return createTripPointEditTemplate({
-      point: this.point,
+      point: this.#point,
+      pointDestination:this.#pointDestination,
+      pointOffers:this.#pointOffers
+
     });
   }
 
-  getElement(){
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
+  #resetButtonClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#onResetClick();
+  };
 
-  removeElement() {
-    this.element = null;
-  }
+  #submitFormHandler = (evt) => {
+    evt.preventDefault();
+    this.#onSubmitClick();
+  };
 }
