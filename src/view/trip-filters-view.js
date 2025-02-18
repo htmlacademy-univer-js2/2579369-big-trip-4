@@ -32,7 +32,7 @@ function createTripFilterTemplate(filterItems){
 }
 export default class TripFiltersView extends AbstractView {
   #filters = null;
-  constructor({filters}) {
+  constructor({filters = []} = {}) {
     super();
     this.#filters = filters;
   }
