@@ -2,9 +2,7 @@ import TripEventListView from '../view/event-list-view.js';
 import TripSortView from '../view/trip-sort-viev.js';
 import TripPointEditView from '../view/trip-point-edit-view.js';
 import TripPointView from '../view/trip-point-view.js';
-//import TripFiltersView from '../view/trip-filters-view.js';
 import EvenListEmptyView from '../view/event-list-empty-view.js';
-//import { generateFilter } from '../mock/filters.js';
 import { render, replace } from '../framework/render.js';
 
 export default class BoardPresenter {
@@ -18,15 +16,12 @@ export default class BoardPresenter {
   #eventListComponent = null;
 
   #points = [];
-  //#filters = [];
 
   constructor({container,offersModel,destinationModel,pointModel}) {
     this.#container = container;
     this.#destinationModel = destinationModel;
     this.#offersModel = offersModel;
     this.#pointModel = pointModel;
-    //this.#filters = generateFilter(this.#pointModel.point);
-    //console.log(this.#filters);
     this.#points = [...this.#pointModel.point];
   }
 
@@ -35,10 +30,8 @@ export default class BoardPresenter {
       render(new EvenListEmptyView(),this.#container);
       return;
     }
-    //console.log(this.#points.length);
     this.#eventListComponent = new TripEventListView();
 
-    //render(new TripFiltersView({filters: this.#filters}),this.#container);
     render(this.#sortComponent, this.#container);
     render(this.#eventListComponent,this.#container);
     // render (new TripPointEditView({
