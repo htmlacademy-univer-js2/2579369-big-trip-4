@@ -5,7 +5,7 @@ function getRandomArrayElement(items) {
 }
 
 function formatDateTimeLong(date) {
-  return dayjs(date).format('YYYY-MM-DDTHH:mm');
+  return dayjs(date).format('YY/MM/DD HH:mm');
 }
 
 function isTimeExpired(dueDate) {

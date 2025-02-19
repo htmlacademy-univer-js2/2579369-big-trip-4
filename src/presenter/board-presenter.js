@@ -2,6 +2,7 @@ import TripEventListView from '../view/event-list-view.js';
 import TripSortView from '../view/trip-sort-viev.js';
 import TripPointEditView from '../view/trip-point-edit-view.js';
 import TripPointView from '../view/trip-point-view.js';
+import EvenListEmptyView from '../view/event-list-empty-view.js';
 import { render, replace } from '../framework/render.js';
 
 export default class BoardPresenter {
@@ -12,29 +13,31 @@ export default class BoardPresenter {
   #pointModel = null;
 
   #sortComponent = new TripSortView();
-  #eventListComponent = new TripEventListView();
+  #eventListComponent = null;
 
   #points = [];
+
   constructor({container,offersModel,destinationModel,pointModel}) {
     this.#container = container;
     this.#destinationModel = destinationModel;
     this.#offersModel = offersModel;
     this.#pointModel = pointModel;
-
+    this.#points = [...this.#pointModel.point];
   }
 
   init() {
+    if(this.#points.length === 0){
+      render(new EvenListEmptyView(),this.#container);
+      return;
+    }
     this.#eventListComponent = new TripEventListView();
-    this.#points = [...this.#pointModel.point];
 
     render(this.#sortComponent, this.#container);
     render(this.#eventListComponent,this.#container);
-
     // render (new TripPointEditView({
     //   point: this.#points[0],
     // }),
     // this.#eventListComponent.element);
-
     this.#points.forEach((point) => {
       this.#renderPoint(point);
     });
@@ -44,13 +47,12 @@ export default class BoardPresenter {
     const pointComponent = new TripPointView({
       point,
       pointDestination:this.#destinationModel.getByID(point.cityInformation.id),
-      pointOffers:this.#offersModel.getByType(point.type),
+      pointOffers:point.offers,
       onEditClick:pointEditClickHandler
     });
     const pointEditComponent = new TripPointEditView({
       point,
-      pointDestination: this.#destinationModel.get(),
-      pointOffers:this.#offersModel.get(),
+      pointOffers:this.#offersModel.getByType(point.type),
       onSubmitClick: pointSubmitFormHandler,
       onResetClick: resetButtonClickHandler
     });

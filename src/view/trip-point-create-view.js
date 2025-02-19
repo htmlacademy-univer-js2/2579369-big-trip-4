@@ -3,7 +3,7 @@ import { destinations } from '../mock/destination.js';
 import { formatDateTimeLong } from '../utils.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
-function createTripPointEditTemplate({point,pointOffers}){
+function createTripPointCreateTemplate({point,pointOffers}){
   const {
     type,cost,dateStart,dateEnd,offers,cityInformation
   } = point;
@@ -93,10 +93,7 @@ function createTripPointEditTemplate({point,pointOffers}){
                   </div>
 
                   <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-                  <button class="event__reset-btn" type="reset">Delete</button>
-                  <button class="event__rollup-btn" type="button">
-                    <span class="visually-hidden">Open event</span>
-                  </button>
+                  <button class="event__reset-btn" type="reset">Cancel</button>
                 </header>
                 <section class="event__details">
                   <section class="event__section  event__section--offers">
@@ -122,7 +119,7 @@ function createTripPointEditTemplate({point,pointOffers}){
             </li>`;
 }
 
-export default class TripPointEditView extends AbstractView{
+export default class TripPointCreateView extends AbstractView{
   #point = null;
   #pointOffers = null;
   #onSubmitClick = null;
@@ -140,16 +137,12 @@ export default class TripPointEditView extends AbstractView{
       .addEventListener('click',this.#resetButtonClickHandler);
 
     this.element
-      .querySelector('.event__rollup-btn')
-      .addEventListener('click',this.#resetButtonClickHandler);
-
-    this.element
       .querySelector('form')
       .addEventListener('submit',this.#submitFormHandler);
   }
 
   get template(){
-    return createTripPointEditTemplate({
+    return createTripPointCreateTemplate({
       point: this.#point,
       pointOffers:this.#pointOffers
 

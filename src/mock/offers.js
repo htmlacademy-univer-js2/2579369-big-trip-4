@@ -31,11 +31,11 @@ const dopOptions = [
 
   },
   {
-    type:'Car',
+    type:'Drive',
     offers:[
       {
         id: crypto.randomUUID(),
-        title:'Rnet a car',
+        title:'Rent a car',
         price:200,
       }
     ]
