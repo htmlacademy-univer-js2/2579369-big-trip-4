@@ -1,9 +1,8 @@
 import TripEventListView from '../view/event-list-view.js';
 import TripSortView from '../view/trip-sort-viev.js';
-import TripPointEditView from '../view/trip-point-edit-view.js';
-import TripPointView from '../view/trip-point-view.js';
 import EventListEmptyView from '../view/event-list-empty-view.js';
-import { render, replace } from '../framework/render.js';
+import { render} from '../framework/render.js';
+import PointPresenter from './point-presenter.js';
 
 export default class BoardPresenter {
   #container = null;
@@ -44,49 +43,12 @@ export default class BoardPresenter {
   }
 
   #renderPoint = (point) => {
-    const pointComponent = new TripPointView({
-      point,
-      pointDestination:this.#destinationModel.getByID(point.cityInformation.id),
-      pointOffers:point.offers,
-      onEditClick:pointEditClickHandler
-    });
-    const pointEditComponent = new TripPointEditView({
-      point,
-      pointOffers:this.#offersModel.getByType(point.type),
-      onSubmitClick: pointSubmitFormHandler,
-      onResetClick: resetButtonClickHandler
-    });
 
-    const replacePointToForm = () => {
-      replace(pointEditComponent,pointComponent);
-    };
-
-    const replaceFormToPoint = () => {
-      replace(pointComponent,pointEditComponent);
-    };
-
-    const escKeyDownHandler = (evt) => {
-      if(evt.key === 'Escape' || evt.key === 'Esc') {
-        evt.preventDefault();
-        replaceFormToPoint();
-        document.removeEventListener('keydown', escKeyDownHandler);
-      }
-    };
-
-    function pointEditClickHandler(){
-      replacePointToForm();
-      document.addEventListener('keydown',escKeyDownHandler);
-    }
-
-    function resetButtonClickHandler () {
-      replaceFormToPoint();
-      document.removeEventListener('keydown',escKeyDownHandler);
-    }
-
-    function pointSubmitFormHandler() {
-      replaceFormToPoint();
-      document.removeEventListener('keydown',escKeyDownHandler);
-    }
-    render(pointComponent,this.#eventListComponent.element);
+    const pointPresenter = new PointPresenter(
+      this.#eventListComponent.element,
+      this.#destinationModel,
+      this.#offersModel
+    );
+    pointPresenter.init(point);
   };
 }
