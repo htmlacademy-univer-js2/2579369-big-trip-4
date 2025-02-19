@@ -47,13 +47,12 @@ export default class BoardPresenter {
     const pointComponent = new TripPointView({
       point,
       pointDestination:this.#destinationModel.getByID(point.cityInformation.id),
-      pointOffers:this.#offersModel.getByType(point.type),
+      pointOffers:point.offers,
       onEditClick:pointEditClickHandler
     });
     const pointEditComponent = new TripPointEditView({
       point,
-      pointDestination: this.#destinationModel.get(),
-      pointOffers:this.#offersModel.get(),
+      pointOffers:this.#offersModel.getByType(point.type),
       onSubmitClick: pointSubmitFormHandler,
       onResetClick: resetButtonClickHandler
     });
