@@ -3,6 +3,7 @@ import TripSortView from '../view/trip-sort-viev.js';
 import EventListEmptyView from '../view/event-list-empty-view.js';
 import { render} from '../framework/render.js';
 import PointPresenter from './point-presenter.js';
+import { updateItem } from '../utils/common.js';
 
 export default class BoardPresenter {
   #container = null;
@@ -15,7 +16,6 @@ export default class BoardPresenter {
   #eventListComponent = null;
 
   #points = [];
-
   #pointPresenters = new Map();
 
   constructor({container,offersModel,destinationModel,pointModel}) {
@@ -29,11 +29,6 @@ export default class BoardPresenter {
   init() {
 
     render(this.#sortComponent, this.#container);
-    //render(this.#eventListComponent,this.#container);
-    // render (new TripPointEditView({
-    //   point: this.#points[0],
-    // }),
-    // this.#eventListComponent.element);
     this.#renderBoard();
   }
 
@@ -42,8 +37,11 @@ export default class BoardPresenter {
     const pointPresenter = new PointPresenter(
       this.#eventListComponent.element,
       this.#destinationModel,
-      this.#offersModel
+      this.#offersModel,
+      this.#pointChangeHandler,
+      this.#modeChangeHandler
     );
+
     pointPresenter.init(point);
     this.#pointPresenters.set(point.id, pointPresenter);
   };
@@ -67,5 +65,14 @@ export default class BoardPresenter {
 
     this.#renderPointListContainer();
     this.#renderPoints();
+  };
+
+  #modeChangeHandler = () => {
+    this.#pointPresenters.forEach((presenter) => presenter.resetView());
+  };
+
+  #pointChangeHandler = (updatedPoint) => {
+    this.#points = updateItem(this.#points,updatedPoint);
+    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
   };
 }
