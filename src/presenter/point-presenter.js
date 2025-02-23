@@ -1,4 +1,4 @@
-import{render, replace} from '../framework/render.js';
+import{render, replace, remove} from '../framework/render.js';
 import TripPointEditView from '../view/trip-point-edit-view.js';
 import TripPointView from '../view/trip-point-view.js';
 
@@ -22,11 +22,15 @@ export default class PointPresenter {
   init(point) {
     this.#point = point;
 
+    const prevPointComponent = this.#pointComponent;
+    const prevPointEditComponent = this.#pointEditComponent;
+
     this.#pointComponent = new TripPointView({
       point: this.#point,
       pointDestination:this.#destinationModel.getByID(point.cityInformation.id),
       pointOffers:point.offers,
-      onEditClick:this.#pointEditClickHandler
+      onEditClick:this.#pointEditClickHandler,
+      //onFavoriteClick: this.#pointFavoriteClickHandler
     });
 
     this.#pointEditComponent = new TripPointEditView ({
@@ -36,7 +40,26 @@ export default class PointPresenter {
       onResetClick: this.#resetButtonClickHandler
     });
 
-    render(this.#pointComponent,this.#pointListContainer);
+    if(prevPointComponent === null || prevPointEditComponent === null){
+      render(this.#pointComponent,this.#pointListContainer);
+      return;
+    }
+
+    if(this.#pointListContainer.contains(prevPointComponent.element)){
+      replace(this.#pointComponent,prevPointComponent);
+    }
+
+    if(this.#pointListContainer.contains(prevPointEditComponent.element)){
+      replace(this.#pointEditComponent,prevPointEditComponent);
+    }
+
+    remove(prevPointComponent);
+    remove(prevPointEditComponent);
+  }
+
+  destroy(){
+    remove(this.#pointComponent);
+    remove(this.#pointEditComponent);
   }
 
   #replacePointToForm() {
@@ -70,4 +93,8 @@ export default class PointPresenter {
     this.#replaceFormToPoint();
     document.addEventListener('keydown',this.#escKeyDownHandler);
   };
+  // #pointFavoriteClickHandler = () => {
+  //   this#
+  // }
+
 }

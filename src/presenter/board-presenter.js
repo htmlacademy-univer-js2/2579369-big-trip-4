@@ -16,6 +16,8 @@ export default class BoardPresenter {
 
   #points = [];
 
+  #pointPresenters = new Map();
+
   constructor({container,offersModel,destinationModel,pointModel}) {
     this.#container = container;
     this.#destinationModel = destinationModel;
@@ -25,21 +27,14 @@ export default class BoardPresenter {
   }
 
   init() {
-    if(this.#points.length === 0){
-      render(new EventListEmptyView(),this.#container);
-      return;
-    }
-    this.#eventListComponent = new TripEventListView();
 
     render(this.#sortComponent, this.#container);
-    render(this.#eventListComponent,this.#container);
+    //render(this.#eventListComponent,this.#container);
     // render (new TripPointEditView({
     //   point: this.#points[0],
     // }),
     // this.#eventListComponent.element);
-    this.#points.forEach((point) => {
-      this.#renderPoint(point);
-    });
+    this.#renderBoard();
   }
 
   #renderPoint = (point) => {
@@ -50,5 +45,27 @@ export default class BoardPresenter {
       this.#offersModel
     );
     pointPresenter.init(point);
+    this.#pointPresenters.set(point.id, pointPresenter);
+  };
+
+  #renderPoints = () => {
+    this.#points.forEach((point) => {
+      this.#renderPoint(point);
+    });
+  };
+
+  #renderPointListContainer = () => {
+    this.#eventListComponent = new TripEventListView();
+    render(this.#eventListComponent,this.#container);
+  };
+
+  #renderBoard = () => {
+    if(this.#points.length === 0){
+      render(new EventListEmptyView(),this.#container);
+      return;
+    }
+
+    this.#renderPointListContainer();
+    this.#renderPoints();
   };
 }
