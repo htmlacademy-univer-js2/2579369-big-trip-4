@@ -63,17 +63,23 @@ export default class TripPointView extends AbstractView {
   #pointDestination = null;
   #pointOffers = null;
   #onEditClick = null;
+  #onFavoriteClick = null;
 
-  constructor({point,pointDestination, pointOffers,onEditClick}){
+  constructor({point,pointDestination, pointOffers,onEditClick,onFavoriteClick}){
     super();
     this.#point = point;
     this.#pointDestination = pointDestination;
     this.#pointOffers = pointOffers;
     this.#onEditClick = onEditClick;
+    this.#onFavoriteClick = onFavoriteClick;
 
     this.element
       .querySelector('.event__rollup-btn')
       .addEventListener('click',this.#editButtonClickHandler);
+
+    this.element
+      .querySelector('.event__favorite-btn')
+      .addEventListener('click',this.#favoriteButtonClickHandler);
   }
 
   get template(){
@@ -87,5 +93,10 @@ export default class TripPointView extends AbstractView {
   #editButtonClickHandler = (evt) => {
     evt.preventDefault();
     this.#onEditClick();
+  };
+
+  #favoriteButtonClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#onFavoriteClick();
   };
 }
