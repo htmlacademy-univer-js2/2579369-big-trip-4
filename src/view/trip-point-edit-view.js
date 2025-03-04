@@ -200,16 +200,12 @@ export default class TripPointEditView extends AbstractStatefulView{
   };
 
   #destinationChangeHandler = (evt) => {
-    const newDestination = destinations.find((dest) => dest.cityName === evt.target.value) || {
-      cityName: evt.target.value,
-      description: '',
-      photos: []
-    };
+    const selectedDestination = destinations.find((dest) => dest.cityName === evt.target.value);
 
     this.updateElement({
       point: {
         ...this._state.point,
-        destination: newDestination
+        cityInformation: selectedDestination,
       },
     });
   };
