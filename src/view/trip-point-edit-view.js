@@ -8,7 +8,7 @@ function createTripPointEditTemplate({state,pointOffers}){
     point
   } = state;
   const {
-    type,cost,dateStart,dateEnd,offers, destination
+    type,cost,dateStart,dateEnd,offers, cityInformation
   } = point;
 
   const eventTypes = [
@@ -47,7 +47,7 @@ function createTripPointEditTemplate({state,pointOffers}){
     `<option value="${destin.cityName}"></option>`
   ).join('');
 
-  const photoImgElement = destination.photos.map((photo) =>
+  const photoImgElement = cityInformation.photos.map((photo) =>
     `<img class="event__photo" src="${photo.src}" alt="${photo.description}">`
   ).join('');
 
@@ -73,7 +73,7 @@ function createTripPointEditTemplate({state,pointOffers}){
                     <label class="event__label  event__type-output" for="event-destination-1">
                       ${type}
                     </label>
-                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.cityName}" list="destination-list-1">
+                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${cityInformation.cityName}" list="destination-list-1">
                     <datalist id="destination-list-1">
                       ${destinationElement}
                     </datalist>
@@ -112,7 +112,7 @@ function createTripPointEditTemplate({state,pointOffers}){
 
                   <section class="event__section  event__section--destination">
                     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-                    <p class="event__destination-description">${destination.description}</p>
+                    <p class="event__destination-description">${cityInformation.description}</p>
 
                     <div class="event__photos-container">
                       <div class="event__photos-tape">
@@ -200,10 +200,16 @@ export default class TripPointEditView extends AbstractStatefulView{
   };
 
   #destinationChangeHandler = (evt) => {
+    const newDestination = destinations.find((dest) => dest.cityName === evt.target.value) || {
+      cityName: evt.target.value,
+      description: '',
+      photos: []
+    };
+
     this.updateElement({
       point: {
         ...this._state.point,
-        destination: destinations.find((dest) => dest.name === evt.target.value)
+        destination: newDestination
       },
     });
   };
