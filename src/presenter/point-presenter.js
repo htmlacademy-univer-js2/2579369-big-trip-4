@@ -46,6 +46,7 @@ export default class PointPresenter {
     this.#pointEditComponent = new TripPointEditView ({
       point,
       pointOffers:this.#offersModel.getByType(point.type),
+      //pointDestination: this.#destinationModel.getByID(point.cityInformation.id),
       onSubmitClick: this.#pointSubmitFormHandler,
       onResetClick: this.#resetButtonClickHandler
     });
@@ -69,6 +70,7 @@ export default class PointPresenter {
 
   resetView = () => {
     if(this.#mode !== Mode.DEFAULT){
+      this.#pointEditComponent.reset(this.#point);
       this.#replaceFormToPoint();
     }
   };
@@ -95,6 +97,7 @@ export default class PointPresenter {
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
+      this.#pointEditComponent.reset(this.#point);
       this.#replaceFormToPoint();
     }
   };
@@ -111,6 +114,7 @@ export default class PointPresenter {
 
   #resetButtonClickHandler = () => {
     this.#replaceFormToPoint();
+    this.#pointEditComponent.reset(this.#point);
     document.addEventListener('keydown',this.#escKeyDownHandler);
   };
 
