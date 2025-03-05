@@ -30,7 +30,7 @@ const boardPresenter = new BoardPresenter({
   pointModel
 });
 
-const filters = generateFilter(pointModel.point);
+const filters = generateFilter(pointModel.points);
 //console.log(filters);
 render(new TripInfoView(),tripInfoElement,RenderPosition.AFTERBEGIN);
 render(new TripFiltersView({filters}),filtersBlock);
