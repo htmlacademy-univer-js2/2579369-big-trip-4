@@ -126,7 +126,7 @@ function createTripPointEditTemplate({state,pointOffers}){
             </li>`;
 }
 
-export default class TripPointEditView extends AbstractStatefulView{
+export default class TripPointCreateView extends AbstractStatefulView{
 
   #pointOffers = null;
   #onSubmitClick = null;
@@ -138,7 +138,7 @@ export default class TripPointEditView extends AbstractStatefulView{
 
   constructor({point = pointEmpty, onSubmitClick,onResetClick,pointOffers}){
     super();
-    this._setState(TripPointEditView.parsePointToState({point}));
+    this._setState(TripPointCreateView.parsePointToState({point}));
 
 
     this.#pointOffers = pointOffers;
@@ -205,7 +205,7 @@ export default class TripPointEditView extends AbstractStatefulView{
 
   #submitFormHandler = (evt) => {
     evt.preventDefault();
-    this.#onSubmitClick(TripPointEditView.parseStateToPoint(this._state));
+    this.#onSubmitClick(TripPointCreateView.parseStateToPoint(this._state));
   };
 
   #eventTypeChangeHandler = (evt) => {
