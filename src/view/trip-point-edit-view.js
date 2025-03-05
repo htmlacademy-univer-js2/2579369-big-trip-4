@@ -7,7 +7,7 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
 
-function createTripPointEditTemplate({state,pointOffers}){
+function createTripPointEditTemplate({state}){
   const {
     point
   } = state;
@@ -35,7 +35,8 @@ function createTripPointEditTemplate({state,pointOffers}){
             </div>`;
   }).join('');
 
-  const OfferSelectorsElement = pointOffers.map((offer) => {
+  const availableOffers = state.allOffers.find((offer) => offer.type === type)?.offers ?? [];
+  const OfferSelectorsElement = availableOffers.map((offer) => {
     const isChecked = (offers ?? []).some((offerItem) => offerItem.id === offer.id) ? 'checked' : '';
     return `<div class="event__offer-selector">
               <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.type}-${offer.id}" type="checkbox" name="event-offer-${offer.type}" ${isChecked}>
@@ -139,12 +140,10 @@ export default class TripPointEditView extends AbstractStatefulView{
   #datepickerStart = null;
   #datepickerEnd = null;
 
-  constructor({point = pointEmpty, onSubmitClick,onResetClick,pointOffers}){
+  constructor({point = pointEmpty, onSubmitClick,onResetClick,allOffers}){
     super();
-    this._setState(TripPointEditView.parsePointToState({point}));
+    this._setState(TripPointEditView.parsePointToState({point, allOffers}));
 
-
-    this.#pointOffers = pointOffers;
     this.#onSubmitClick = onSubmitClick;
     this.#onResetClick = onResetClick;
 
@@ -156,7 +155,6 @@ export default class TripPointEditView extends AbstractStatefulView{
   get template(){
     return createTripPointEditTemplate({
       state: this._state,
-      pointOffers:this.#pointOffers
 
     });
   }
@@ -193,11 +191,12 @@ export default class TripPointEditView extends AbstractStatefulView{
     this._restoreHandlers();
   };
 
-  static parsePointToState = ({point}) => ({
+  static parsePointToState = ({point, allOffers}) => ({
     point: {
       ...point,
       offers: point.offers
-    }
+    },
+    allOffers
   });
 
   static parseStateToPoint = (state) => state.point;

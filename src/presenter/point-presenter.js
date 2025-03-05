@@ -45,8 +45,7 @@ export default class PointPresenter {
 
     this.#pointEditComponent = new TripPointEditView ({
       point,
-      pointOffers:this.#offersModel.getByType(point.type),
-      //pointDestination: this.#destinationModel.getByID(point.cityInformation.id),
+      allOffers:this.#offersModel.get(),
       onSubmitClick: this.#pointSubmitFormHandler,
       onResetClick: this.#resetButtonClickHandler
     });
