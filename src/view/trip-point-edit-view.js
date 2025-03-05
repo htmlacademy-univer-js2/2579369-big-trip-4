@@ -39,7 +39,7 @@ function createTripPointEditTemplate({state}){
   const OfferSelectorsElement = availableOffers.map((offer) => {
     const isChecked = (offers ?? []).some((offerItem) => offerItem.id === offer.id) ? 'checked' : '';
     return `<div class="event__offer-selector">
-              <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.type}-${offer.id}" type="checkbox" name="event-offer-${offer.type}" ${isChecked}>
+              <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.type}-${offer.id}" type="checkbox" name="event-offer-${offer.type}" ${isChecked} data-offer-id="${offer.id}">
               <label class="event__offer-label" for="event-offer-${offer.type}-${offer.id}">
                 <span class="event__offer-title">${offer.title}</span>
                 &plus;&euro;&nbsp;
@@ -235,11 +235,15 @@ export default class TripPointEditView extends AbstractStatefulView{
 
   #offersChangeHandler = () => {
     const checkBoxes = Array.from(this.element.querySelectorAll('.event__offer-checkbox:checked'));
+    const selectedOfferId = checkBoxes.map((element) => (element.dataset.offerId));
+    const availableOffers = this._state.allOffers.find((offer) => offer.type === this._state.point.type)?.offers || [];
+
+    const selectedOffers = availableOffers.filter((offer) => selectedOfferId.includes(offer.id));
 
     this._setState({
       point:{
         ...this._state.point,
-        offers:checkBoxes.map((element) => element.dataset.offerId)
+        offers:selectedOffers
       }
     });
 
