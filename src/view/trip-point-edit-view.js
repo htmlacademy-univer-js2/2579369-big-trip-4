@@ -1,5 +1,4 @@
 import { pointEmpty } from '../mock/point.js';
-import { destinations } from '../mock/destination.js';
 import { formatDateTimeLong } from '../utils.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 
@@ -9,7 +8,7 @@ import 'flatpickr/dist/flatpickr.min.css';
 
 function createTripPointEditTemplate({state}){
   const {
-    point
+    point, destinations
   } = state;
   const {
     type,cost,dateStart,dateEnd,offers, cityInformation
@@ -134,17 +133,18 @@ export default class TripPointEditView extends AbstractStatefulView{
 
   #onSubmitClick = null;
   #onResetClick = null;
-
+  #destinations = null;
 
   #datepickerStart = null;
   #datepickerEnd = null;
 
-  constructor({point = pointEmpty, onSubmitClick,onResetClick,allOffers}){
+  constructor({point = pointEmpty, onSubmitClick,onResetClick,allOffers,destinations}){
     super();
     this._setState(TripPointEditView.parsePointToState({point, allOffers}));
 
     this.#onSubmitClick = onSubmitClick;
     this.#onResetClick = onResetClick;
+    this.#destinations = destinations;
 
     this._restoreHandlers();
 
@@ -153,7 +153,10 @@ export default class TripPointEditView extends AbstractStatefulView{
 
   get template(){
     return createTripPointEditTemplate({
-      state: this._state,
+      state:{
+        ...this._state,
+        destinations: this.#destinations
+      }
 
     });
   }
@@ -221,7 +224,7 @@ export default class TripPointEditView extends AbstractStatefulView{
   };
 
   #destinationChangeHandler = (evt) => {
-    const selectedDestination = destinations.find((dest) => dest.cityName === evt.target.value);
+    const selectedDestination = this.#destinations.find((dest) => dest.cityName === evt.target.value);
 
     this.updateElement({
       point: {
