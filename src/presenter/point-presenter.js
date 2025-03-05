@@ -2,9 +2,20 @@ import{render, replace, remove} from '../framework/render.js';
 import TripPointEditView from '../view/trip-point-edit-view.js';
 import TripPointView from '../view/trip-point-view.js';
 
+const UserAction = {
+  UPDATE_TASK: 'UPDATE_TASK',
+  ADD_TASK: 'ADD_TASK',
+  DELETE_TASK: 'DELETE_TASK',
+};
+
+const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+};
+
 const Mode = {
   DEFAULT: 'DEFAULT',
-  EDDITING: 'EDITING',
+  EDITING: 'EDITING',
 };
 export default class PointPresenter {
   #pointListContainer = null;
@@ -60,7 +71,7 @@ export default class PointPresenter {
       replace(this.#pointComponent,prevPointComponent);
     }
 
-    if(this.#mode === Mode.EDDITING){
+    if(this.#mode === Mode.EDITING){
       replace(this.#pointEditComponent,prevPointEditComponent);
     }
 
@@ -108,21 +119,28 @@ export default class PointPresenter {
   };
 
   #pointSubmitFormHandler = (point) => {
-    this.#handleDataChange(point);
+    this.#handleDataChange(
+      UserAction.UPDATE_TASK,
+      UpdateType.MINOR,
+      point
+    );
     this.#replaceFormToPoint();
   };
 
   #resetButtonClickHandler = () => {
     this.#pointEditComponent.reset(this.#point);
     this.#replaceFormToPoint();
-    document.addEventListener('keydown',this.#escKeyDownHandler);
   };
 
   #pointFavoriteClickHandler = () => {
-    this.#handleDataChange({
-      ...this.#point,
-      isFavorite: !this.#point.isFavorite
-    });
+    this.#handleDataChange(
+      UserAction.UPDATE_TASK,
+      UpdateType.MINOR,
+      {
+        ...this.#point,
+        isFavorite: !this.#point.isFavorite
+      }
+    );
   };
 
 }

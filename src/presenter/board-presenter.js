@@ -21,6 +21,8 @@ export default class BoardPresenter {
     this.#destinationModel = destinationModel;
     this.#offersModel = offersModel;
     this.#pointModel = pointModel;
+
+    this.#pointModel.addObserver(this.#handleModelEvent);
   }
 
   get points(){
@@ -33,14 +35,32 @@ export default class BoardPresenter {
     this.#renderBoard();
   }
 
+  #handleViewAction = (actionType, updateType, update) => {
+    // eslint-disable-next-line no-console
+    console.log(actionType, updateType, update);
+    // Здесь будем вызывать обновление модели.
+    // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
+    // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
+    // update - обновленные данные
+  };
+
+  #handleModelEvent = (updateType, data) => {
+    // eslint-disable-next-line no-console
+    console.log(updateType, data);
+    // В зависимости от типа изменений решаем, что делать:
+    // - обновить часть списка (например, когда поменялось описание)
+    // - обновить список (например, когда задача ушла в архив)
+    // - обновить всю доску (например, при переключении фильтра)
+  };
+
   #renderPoint = (point) => {
 
     const pointPresenter = new PointPresenter(
       this.#eventListComponent.element,
       this.#destinationModel,
       this.#offersModel,
-      this.#pointChangeHandler,
-      this.#modeChangeHandler
+      this.#handleViewAction,
+      this.#modeChangeHandler,
     );
 
     pointPresenter.init(point);
@@ -72,7 +92,7 @@ export default class BoardPresenter {
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
   };
 
-  #pointChangeHandler = (updatedPoint) => {
-    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
-  };
+  // #pointChangeHandler = (updatedPoint) => {
+  //   this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
+  // };
 }
