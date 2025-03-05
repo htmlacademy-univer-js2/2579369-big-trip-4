@@ -132,7 +132,6 @@ function createTripPointEditTemplate({state}){
 
 export default class TripPointEditView extends AbstractStatefulView{
 
-  #pointOffers = null;
   #onSubmitClick = null;
   #onResetClick = null;
 
@@ -194,7 +193,6 @@ export default class TripPointEditView extends AbstractStatefulView{
   static parsePointToState = ({point, allOffers}) => ({
     point: {
       ...point,
-      offers: point.offers
     },
     allOffers
   });
