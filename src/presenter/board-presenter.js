@@ -3,6 +3,7 @@ import TripSortView from '../view/trip-sort-viev.js';
 import EventListEmptyView from '../view/event-list-empty-view.js';
 import { render} from '../framework/render.js';
 import PointPresenter from './point-presenter.js';
+import { UpdateType,UserAction } from '../const.js';
 
 export default class BoardPresenter {
   #container = null;
@@ -36,21 +37,30 @@ export default class BoardPresenter {
   }
 
   #handleViewAction = (actionType, updateType, update) => {
-    // eslint-disable-next-line no-console
-    console.log(actionType, updateType, update);
-    // Здесь будем вызывать обновление модели.
-    // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
-    // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
-    // update - обновленные данные
+    switch (actionType) {
+      case UserAction.UPDATE_TASK:
+        this.#pointModel.updatePoint(updateType, update);
+        break;
+      case UserAction.ADD_TASK:
+        this.#pointModel.addPoint(updateType,update);
+        break;
+      case UserAction.DELETE_TASK:
+        this.#pointModel.deletePoint(updateType,update);
+        break;
+    }
   };
 
   #handleModelEvent = (updateType, data) => {
     // eslint-disable-next-line no-console
     console.log(updateType, data);
-    // В зависимости от типа изменений решаем, что делать:
-    // - обновить часть списка (например, когда поменялось описание)
-    // - обновить список (например, когда задача ушла в архив)
-    // - обновить всю доску (например, при переключении фильтра)
+
+    switch(updateType){
+      case UpdateType.PATCH:
+        this.#pointPresenters.get(data.id).init(data);
+        break;
+      case UpdateType.MINOR:
+        break;
+    }
   };
 
   #renderPoint = (point) => {

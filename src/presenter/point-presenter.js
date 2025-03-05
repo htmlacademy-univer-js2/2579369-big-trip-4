@@ -1,17 +1,7 @@
 import{render, replace, remove} from '../framework/render.js';
 import TripPointEditView from '../view/trip-point-edit-view.js';
 import TripPointView from '../view/trip-point-view.js';
-
-const UserAction = {
-  UPDATE_TASK: 'UPDATE_TASK',
-  ADD_TASK: 'ADD_TASK',
-  DELETE_TASK: 'DELETE_TASK',
-};
-
-const UpdateType = {
-  PATCH: 'PATCH',
-  MINOR: 'MINOR',
-};
+import { UpdateType,UserAction } from '../const.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
