@@ -8,7 +8,7 @@ import 'flatpickr/dist/flatpickr.min.css';
 
 function createTripPointEditTemplate({state}){
   const {
-    point, destinations
+    point, destinations, allOffers
   } = state;
   const {
     type,cost,dateStart,dateEnd,offers, cityInformation
@@ -34,7 +34,7 @@ function createTripPointEditTemplate({state}){
             </div>`;
   }).join('');
 
-  const availableOffers = state.allOffers.find((offer) => offer.type === type)?.offers ?? [];
+  const availableOffers = allOffers.find((offer) => offer.type === type)?.offers ?? [];
   const OfferSelectorsElement = availableOffers.map((offer) => {
     const isChecked = (offers ?? []).some((offerItem) => offerItem.id === offer.id) ? 'checked' : '';
     return `<div class="event__offer-selector">
@@ -134,17 +134,19 @@ export default class TripPointEditView extends AbstractStatefulView{
   #onSubmitClick = null;
   #onResetClick = null;
   #destinations = null;
+  #allOffers = null;
 
   #datepickerStart = null;
   #datepickerEnd = null;
 
   constructor({point = pointEmpty, onSubmitClick,onResetClick,allOffers,destinations}){
     super();
-    this._setState(TripPointEditView.parsePointToState({point, allOffers}));
+    this._setState(TripPointEditView.parsePointToState({point}));
 
     this.#onSubmitClick = onSubmitClick;
     this.#onResetClick = onResetClick;
     this.#destinations = destinations;
+    this.#allOffers = allOffers;
 
     this._restoreHandlers();
 
@@ -155,6 +157,7 @@ export default class TripPointEditView extends AbstractStatefulView{
     return createTripPointEditTemplate({
       state:{
         ...this._state,
+        allOffers:this.#allOffers,
         destinations: this.#destinations
       }
 
@@ -193,11 +196,10 @@ export default class TripPointEditView extends AbstractStatefulView{
     this._restoreHandlers();
   };
 
-  static parsePointToState = ({point, allOffers}) => ({
+  static parsePointToState = ({point}) => ({
     point: {
       ...point,
-    },
-    allOffers
+    }
   });
 
   static parseStateToPoint = (state) => state.point;
@@ -237,7 +239,7 @@ export default class TripPointEditView extends AbstractStatefulView{
   #offersChangeHandler = () => {
     const checkBoxes = Array.from(this.element.querySelectorAll('.event__offer-checkbox:checked'));
     const selectedOfferId = checkBoxes.map((element) => (element.dataset.offerId));
-    const availableOffers = this._state.allOffers.find((offer) => offer.type === this._state.point.type)?.offers || [];
+    const availableOffers = this.#allOffers.find((offer) => offer.type === this._state.point.type)?.offers || [];
 
     const selectedOffers = availableOffers.filter((offer) => selectedOfferId.includes(offer.id));
 
