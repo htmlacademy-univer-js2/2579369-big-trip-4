@@ -5,6 +5,7 @@ import { render} from '../framework/render.js';
 import PointPresenter from './point-presenter.js';
 import { UpdateType,UserAction } from '../const.js';
 
+
 export default class BoardPresenter {
   #container = null;
 
@@ -37,28 +38,31 @@ export default class BoardPresenter {
   }
 
   #handleViewAction = (actionType, updateType, update) => {
+    // eslint-disable-next-line no-console
+    console.log(actionType, updateType, update);
+
     switch (actionType) {
-      case UserAction.UPDATE_TASK:
+      case UserAction.UPDATE_POINT:
         this.#pointModel.updatePoint(updateType, update);
         break;
-      case UserAction.ADD_TASK:
-        this.#pointModel.addPoint(updateType,update);
+      case UserAction.ADD_POINT:
+        this.#pointModel.addPoint(updateType, update);
         break;
-      case UserAction.DELETE_TASK:
-        this.#pointModel.deletePoint(updateType,update);
+      case UserAction.DELETE_POINT:
+        this.#pointModel.deletePoint(updateType, update);
         break;
     }
   };
 
   #handleModelEvent = (updateType, data) => {
-    // eslint-disable-next-line no-console
-    console.log(updateType, data);
 
-    switch(updateType){
+    switch (updateType) {
       case UpdateType.PATCH:
         this.#pointPresenters.get(data.id).init(data);
         break;
       case UpdateType.MINOR:
+        this.#clearPoints();
+        this.#renderBoard();
         break;
     }
   };
@@ -87,6 +91,12 @@ export default class BoardPresenter {
     this.#eventListComponent = new TripEventListView();
     render(this.#eventListComponent,this.#container);
   };
+
+  #clearPoints = () => {
+    this.#pointPresenters.forEach((presenter) => presenter.destroy());
+    this.#pointPresenters.clear();
+  };
+
 
   #renderBoard = () => {
     if(this.points.length === 0){

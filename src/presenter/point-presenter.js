@@ -41,7 +41,7 @@ export default class PointPresenter {
       pointDestination:this.#destinationModel.getByID(point.cityInformation.id),
       pointOffers:point.offers,
       onEditClick:this.#pointEditClickHandler,
-      onFavoriteClick: this.#pointFavoriteClickHandler
+      onFavoriteClick: this.#pointFavoriteClickHandler,
     });
 
     this.#pointEditComponent = new TripPointEditView ({
@@ -49,7 +49,8 @@ export default class PointPresenter {
       allOffers:this.#offersModel.get(),
       destinations: this.#destinationModel.get(),
       onSubmitClick: this.#pointSubmitFormHandler,
-      onResetClick: this.#resetButtonClickHandler
+      onResetClick: this.#resetButtonClickHandler,
+      onDeleteClick:this.#handleDeleteClick
     });
 
     if(prevPointComponent === null || prevPointEditComponent === null){
@@ -108,11 +109,12 @@ export default class PointPresenter {
     document.addEventListener('keydown',this.#escKeyDownHandler);
   };
 
-  #pointSubmitFormHandler = (point) => {
+  #pointSubmitFormHandler = (update) => {
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
     this.#handleDataChange(
-      UserAction.UPDATE_TASK,
+      UserAction.UPDATE_POINT,
       UpdateType.MINOR,
-      point
+      update
     );
     this.#replaceFormToPoint();
   };
@@ -124,13 +126,22 @@ export default class PointPresenter {
 
   #pointFavoriteClickHandler = () => {
     this.#handleDataChange(
-      UserAction.UPDATE_TASK,
+      UserAction.UPDATE_POINT,
       UpdateType.MINOR,
       {
         ...this.#point,
         isFavorite: !this.#point.isFavorite
       }
     );
+  };
+
+  #handleDeleteClick = (point) => {
+    this.#handleDataChange(
+      UserAction.DELETE_POINT,
+      UpdateType.MINOR,
+      point,
+    );
+    this.#replaceFormToPoint();
   };
 
 }
