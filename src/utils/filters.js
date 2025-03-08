@@ -14,4 +14,4 @@ const filter = {
   [FilterType.PAST]: (points) => points.filter((point) => isPointPast(point))
 };
 
-export{filter};
+export{filter, FilterType};
