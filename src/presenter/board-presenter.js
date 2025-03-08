@@ -1,9 +1,10 @@
 import TripEventListView from '../view/event-list-view.js';
 import TripSortView from '../view/trip-sort-viev.js';
 import EventListEmptyView from '../view/event-list-empty-view.js';
-import { render} from '../framework/render.js';
+import { render, remove } from '../framework/render.js';
 import PointPresenter from './point-presenter.js';
 import { UpdateType,UserAction } from '../const.js';
+import { filter, FilterType } from '../utils/filters.js';
 
 
 export default class BoardPresenter {
@@ -12,23 +13,31 @@ export default class BoardPresenter {
   #destinationModel = null;
   #offersModel = null;
   #pointModel = null;
+  #filterModel = null;
 
   #sortComponent = new TripSortView();
   #eventListComponent = null;
+  #eventListEmptyComponent = null;
 
   #pointPresenters = new Map();
+  #filterType = FilterType.EVERYTHING;
 
-  constructor({container,offersModel,destinationModel,pointModel}) {
+  constructor({container,offersModel,destinationModel,pointModel, filterModel}) {
     this.#container = container;
     this.#destinationModel = destinationModel;
     this.#offersModel = offersModel;
     this.#pointModel = pointModel;
+    this.#filterModel = filterModel;
 
     this.#pointModel.addObserver(this.#handleModelEvent);
+    this.#filterModel.addObserver(this.#handleModelEvent);
   }
 
   get points(){
-    return this.#pointModel.points;
+    this.#filterType = this.#filterModel.filter;
+    const points = this.#pointModel.points;
+    const filteredPoints = filter[this.#filterType](points);
+    return filteredPoints;
   }
 
   init() {
@@ -95,12 +104,24 @@ export default class BoardPresenter {
   #clearPoints = () => {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
+
+    if (this.#eventListEmptyComponent) {
+      remove(this.#eventListEmptyComponent);
+    }
   };
+
+  #renderNoPoints() {
+    this.#eventListEmptyComponent = new EventListEmptyView({
+      filterType: this.#filterType
+    });
+
+    render(this.#eventListEmptyComponent,this.#container);
+  }
 
 
   #renderBoard = () => {
     if(this.points.length === 0){
-      render(new EventListEmptyView(),this.#container);
+      this.#renderNoPoints();
       return;
     }
 
@@ -111,8 +132,4 @@ export default class BoardPresenter {
   #modeChangeHandler = () => {
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
   };
-
-  // #pointChangeHandler = (updatedPoint) => {
-  //   this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
-  // };
 }

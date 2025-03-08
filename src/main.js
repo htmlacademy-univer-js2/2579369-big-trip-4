@@ -28,7 +28,8 @@ const boardPresenter = new BoardPresenter({
   container: siteBodyContainerElement,
   destinationModel,
   offersModel,
-  pointModel
+  pointModel,
+  filterModel
 });
 
 const filterPresenter = new FilterPresenter({

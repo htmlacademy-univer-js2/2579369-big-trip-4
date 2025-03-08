@@ -50,7 +50,7 @@ export default class TripFiltersView extends AbstractView {
   }
 
   #filterTypeChangeHandler = (evt) => {
-    evt.preventDefalt();
+    evt.preventDefault();
     this.#handleFilterTypeChange(evt.target.value);
   };
 }
