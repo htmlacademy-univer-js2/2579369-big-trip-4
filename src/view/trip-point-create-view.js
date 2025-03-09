@@ -6,7 +6,7 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
 
-function createTripPointEditTemplate({state}){
+function createTripPointCreateTemplate({state}){
   const {
     point, destinations, allOffers
   } = state;
@@ -34,10 +34,11 @@ function createTripPointEditTemplate({state}){
             </div>`;
   }).join('');
 
-  const OfferSelectorsElement = allOffers.map((offer) => {
+  const availableOffers = allOffers.find((offer) => offer.type === type)?.offers ?? [];
+  const OfferSelectorsElement = availableOffers.map((offer) => {
     const isChecked = (offers ?? []).some((offerItem) => offerItem.id === offer.id) ? 'checked' : '';
     return `<div class="event__offer-selector">
-              <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.type}-${offer.id}" type="checkbox" name="event-offer-${offer.type}" ${isChecked}>
+              <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.type}-${offer.id}" type="checkbox" name="event-offer-${offer.type}" ${isChecked} data-offer-id="${offer.id}">
               <label class="event__offer-label" for="event-offer-${offer.type}-${offer.id}">
                 <span class="event__offer-title">${offer.title}</span>
                 &plus;&euro;&nbsp;
@@ -99,7 +100,7 @@ function createTripPointEditTemplate({state}){
                   </div>
 
                   <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-                  <button class="event__reset-btn" type="reset">Cancel</button>
+                  <button class="event__reset-btn" type="reset">Cansel</button>
                 </header>
                 <section class="event__details">
                   <section class="event__section  event__section--offers">
@@ -129,18 +130,20 @@ export default class TripPointCreateView extends AbstractStatefulView{
 
   #onSubmitClick = null;
   #onResetClick = null;
+  #onDeleteClick = null;
   #destinations = null;
   #allOffers = null;
 
   #datepickerStart = null;
   #datepickerEnd = null;
 
-  constructor({point = pointEmpty, onSubmitClick,onResetClick,allOffers,destinations}){
+  constructor({point = pointEmpty, onSubmitClick,onResetClick, onDeleteClick, allOffers,destinations}){
     super();
     this._setState(TripPointCreateView.parsePointToState({point}));
 
     this.#onSubmitClick = onSubmitClick;
     this.#onResetClick = onResetClick;
+    this.#onDeleteClick = onDeleteClick;
     this.#destinations = destinations;
     this.#allOffers = allOffers;
 
@@ -150,7 +153,7 @@ export default class TripPointCreateView extends AbstractStatefulView{
   }
 
   get template(){
-    return createTripPointEditTemplate({
+    return createTripPointCreateTemplate({
       state:{
         ...this._state,
         allOffers:this.#allOffers,
@@ -176,8 +179,7 @@ export default class TripPointCreateView extends AbstractStatefulView{
 
   _restoreHandlers() {
 
-    this.element.querySelector('.event__reset-btn').addEventListener('click',this.#resetButtonClickHandler);
-    this.element.querySelector('.event__rollup-btn').addEventListener('click',this.#resetButtonClickHandler);
+    this.element.querySelector('.event__reset-btn').addEventListener('click',this.#formDeleteClickHandler);
     this.element.querySelector('form').addEventListener('submit',this.#submitFormHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#eventTypeChangeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
@@ -208,6 +210,11 @@ export default class TripPointCreateView extends AbstractStatefulView{
   #submitFormHandler = (evt) => {
     evt.preventDefault();
     this.#onSubmitClick(TripPointCreateView.parseStateToPoint(this._state));
+  };
+
+  #formDeleteClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#onDeleteClick(TripPointCreateView.parseStateToPoint(this._state));
   };
 
   #eventTypeChangeHandler = (evt) => {
