@@ -3,6 +3,7 @@ import TripSortView from '../view/trip-sort-viev.js';
 import EventListEmptyView from '../view/event-list-empty-view.js';
 import { render, remove } from '../framework/render.js';
 import PointPresenter from './point-presenter.js';
+import NewPointPresenter from './new-point-presenter.js';
 import { UpdateType,UserAction } from '../const.js';
 import { filter, FilterType } from '../utils/filters.js';
 
@@ -16,13 +17,14 @@ export default class BoardPresenter {
   #filterModel = null;
 
   #sortComponent = new TripSortView();
-  #eventListComponent = null;
+  #eventListComponent = new TripEventListView();
   #eventListEmptyComponent = null;
 
   #pointPresenters = new Map();
   #filterType = FilterType.EVERYTHING;
+  #newPointPresenter = null;
 
-  constructor({container,offersModel,destinationModel,pointModel, filterModel}) {
+  constructor({container,offersModel,destinationModel,pointModel, filterModel, onNewEventDestroy}) {
     this.#container = container;
     this.#destinationModel = destinationModel;
     this.#offersModel = offersModel;
@@ -31,6 +33,14 @@ export default class BoardPresenter {
 
     this.#pointModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
+
+    this.#newPointPresenter = new NewPointPresenter ({
+      pointListContainer: this.#eventListComponent.element,
+      onDataChange: this.#handleViewAction,
+      onDestroy: onNewEventDestroy,
+      destinationModel: this.#destinationModel,
+      offersModel: this.#offersModel
+    });
   }
 
   get points(){
@@ -44,6 +54,11 @@ export default class BoardPresenter {
 
     render(this.#sortComponent, this.#container);
     this.#renderBoard();
+  }
+
+  createPoint() {
+    this.#filterModel.setFilter(UpdateType.MINOR, FilterType.EVERYTHING);
+    this.#newPointPresenter.init();
   }
 
   #handleViewAction = (actionType, updateType, update) => {
@@ -97,11 +112,11 @@ export default class BoardPresenter {
   };
 
   #renderPointListContainer = () => {
-    this.#eventListComponent = new TripEventListView();
     render(this.#eventListComponent,this.#container);
   };
 
   #clearPoints = () => {
+    this.#newPointPresenter.destroy();
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
 
@@ -130,6 +145,7 @@ export default class BoardPresenter {
   };
 
   #modeChangeHandler = () => {
+    this.#newPointPresenter.destroy();
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
   };
 }

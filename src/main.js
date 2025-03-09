@@ -1,6 +1,7 @@
 import TripInfoView from './view/trip-info-view';
 import BoardPresenter from './presenter/board-presenter.js';
 import FilterPresenter from './presenter/filter-presenter.js';
+import NewEventButtonView from './view/new-event-button.js';
 
 import {render, RenderPosition} from './framework/render.js';
 
@@ -29,7 +30,8 @@ const boardPresenter = new BoardPresenter({
   destinationModel,
   offersModel,
   pointModel,
-  filterModel
+  filterModel,
+  onNewEventDestroy: handleNewEventFormClose,
 });
 
 const filterPresenter = new FilterPresenter({
@@ -37,6 +39,20 @@ const filterPresenter = new FilterPresenter({
   filterModel,
   pointModel
 });
+
+const newEventButtonComponent = new NewEventButtonView({
+  onClick: handleNewEventButtonClick
+});
+
+function handleNewEventFormClose() {
+  newEventButtonComponent.element.disabled = false;
+}
+
+function handleNewEventButtonClick() {
+  boardPresenter.createPoint();
+  newEventButtonComponent.element.disabled = true;
+}
+render(newEventButtonComponent,tripInfoElement);
 
 render(new TripInfoView(),tripInfoElement,RenderPosition.AFTERBEGIN);
 
