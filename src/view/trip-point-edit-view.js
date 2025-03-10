@@ -77,7 +77,7 @@ function createTripPointEditTemplate({state}){
                     <label class="event__label  event__type-output" for="event-destination-1">
                       ${type}
                     </label>
-                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${cityInformation.cityName}" list="destination-list-1">
+                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${cityInformation.cityName}" list="destination-list-1" required autocomplete="off">
                     <datalist id="destination-list-1">
                       ${destinationElement}
                     </datalist>
@@ -96,7 +96,7 @@ function createTripPointEditTemplate({state}){
                       <span class="visually-hidden">Price</span>
                       &euro;
                     </label>
-                    <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${cost || ''}">
+                    <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${cost || ''}">
                   </div>
 
                   <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -133,18 +133,20 @@ export default class TripPointEditView extends AbstractStatefulView{
 
   #onSubmitClick = null;
   #onResetClick = null;
+  #onDeleteClick = null;
   #destinations = null;
   #allOffers = null;
 
   #datepickerStart = null;
   #datepickerEnd = null;
 
-  constructor({point = pointEmpty, onSubmitClick,onResetClick,allOffers,destinations}){
+  constructor({point = pointEmpty, onSubmitClick,onResetClick, onDeleteClick, allOffers,destinations}){
     super();
     this._setState(TripPointEditView.parsePointToState({point}));
 
     this.#onSubmitClick = onSubmitClick;
     this.#onResetClick = onResetClick;
+    this.#onDeleteClick = onDeleteClick;
     this.#destinations = destinations;
     this.#allOffers = allOffers;
 
@@ -180,7 +182,7 @@ export default class TripPointEditView extends AbstractStatefulView{
 
   _restoreHandlers() {
 
-    this.element.querySelector('.event__reset-btn').addEventListener('click',this.#resetButtonClickHandler);
+    this.element.querySelector('.event__reset-btn').addEventListener('click',this.#formDeleteClickHandler);
     this.element.querySelector('.event__rollup-btn').addEventListener('click',this.#resetButtonClickHandler);
     this.element.querySelector('form').addEventListener('submit',this.#submitFormHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#eventTypeChangeHandler);
@@ -214,6 +216,11 @@ export default class TripPointEditView extends AbstractStatefulView{
     this.#onSubmitClick(TripPointEditView.parseStateToPoint(this._state));
   };
 
+  #formDeleteClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#onDeleteClick(TripPointEditView.parseStateToPoint(this._state));
+  };
+
   #eventTypeChangeHandler = (evt) => {
 
     this.updateElement({
@@ -227,6 +234,11 @@ export default class TripPointEditView extends AbstractStatefulView{
 
   #destinationChangeHandler = (evt) => {
     const selectedDestination = this.#destinations.find((dest) => dest.cityName === evt.target.value);
+
+    if (!selectedDestination) {
+      evt.target.value = '';
+      return;
+    }
 
     this.updateElement({
       point: {
