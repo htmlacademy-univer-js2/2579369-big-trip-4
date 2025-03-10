@@ -48,10 +48,10 @@ const points = [
 const pointEmpty =
   {
     type: 'Flight',
-    cityInformation:null,
-    dateStart:null,
-    dateEnd:null,
-    cost:0,
+    cityInformation:{ cityName: '', description: '', photos: [] },
+    dateStart:new Date(),
+    dateEnd:new Date(),
+    cost:'0',
     isFavorite:false,
     offers:[],
   };
