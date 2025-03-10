@@ -7,6 +7,9 @@ import NewPointPresenter from './new-point-presenter.js';
 import { UpdateType,UserAction } from '../const.js';
 import { filter, FilterType } from '../utils/filters.js';
 
+import TripInfoView from '../view/trip-info-view.js';
+import { RenderPosition } from '../framework/render.js';
+
 
 export default class BoardPresenter {
   #container = null;
@@ -20,16 +23,20 @@ export default class BoardPresenter {
   #eventListComponent = new TripEventListView();
   #eventListEmptyComponent = null;
 
+  #tripInfoComponent = new TripInfoView();
+  #tripInfoContainer = null;
+
   #pointPresenters = new Map();
   #filterType = FilterType.EVERYTHING;
   #newPointPresenter = null;
 
-  constructor({container,offersModel,destinationModel,pointModel, filterModel, onNewEventDestroy}) {
+  constructor({container,offersModel,destinationModel,pointModel, filterModel,tripInfoContainer, onNewEventDestroy}) {
     this.#container = container;
     this.#destinationModel = destinationModel;
     this.#offersModel = offersModel;
     this.#pointModel = pointModel;
     this.#filterModel = filterModel;
+    this.#tripInfoContainer = tripInfoContainer;
 
     this.#pointModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
@@ -51,7 +58,7 @@ export default class BoardPresenter {
   }
 
   init() {
-
+    //render(this.#tripInfoComponent,this.#tripInfoContainer,RenderPosition.AFTERBEGIN);
     render(this.#sortComponent, this.#container);
     this.#renderBoard();
   }
@@ -62,8 +69,6 @@ export default class BoardPresenter {
   }
 
   #handleViewAction = (actionType, updateType, update) => {
-    // eslint-disable-next-line no-console
-    console.log(actionType, updateType, update);
 
     switch (actionType) {
       case UserAction.UPDATE_POINT:
@@ -115,6 +120,15 @@ export default class BoardPresenter {
     render(this.#eventListComponent,this.#container);
   };
 
+  #renderTripInfo = () => {
+    if(this.#tripInfoComponent){
+      remove(this.#tripInfoComponent);
+    }
+
+    this.#tripInfoComponent = new TripInfoView();
+    render(this.#tripInfoComponent,this.#tripInfoContainer,RenderPosition.AFTERBEGIN);
+  };
+
   #clearPoints = () => {
     this.#newPointPresenter.destroy();
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
@@ -131,9 +145,17 @@ export default class BoardPresenter {
   };
 
   #renderNoPoints() {
+    if(this.#sortComponent){
+      remove (this.#sortComponent);
+    }
     this.#eventListEmptyComponent = new EventListEmptyView({
       filterType: this.#filterType
     });
+
+    if(this.#tripInfoComponent){
+      remove(this.#tripInfoComponent);
+      this.#tripInfoComponent = null;
+    }
 
     render(this.#eventListEmptyComponent,this.#container);
   }
@@ -148,6 +170,7 @@ export default class BoardPresenter {
 
     this.#renderPointListContainer();
     this.#renderPoints();
+    this.#renderTripInfo();
   };
 
   #modeChangeHandler = () => {
