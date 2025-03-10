@@ -123,6 +123,11 @@ export default class BoardPresenter {
     if (this.#eventListEmptyComponent) {
       remove(this.#eventListEmptyComponent);
     }
+
+    if(this.#eventListEmptyComponent){
+      remove(this.#eventListEmptyComponent);
+      this.#eventListEmptyComponent = null;
+    }
   };
 
   #renderNoPoints() {
@@ -135,6 +140,7 @@ export default class BoardPresenter {
 
 
   #renderBoard = () => {
+    this.#clearPoints();
     if(this.points.length === 0){
       this.#renderNoPoints();
       return;

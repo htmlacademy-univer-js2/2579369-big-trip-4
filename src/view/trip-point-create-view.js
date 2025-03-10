@@ -77,7 +77,7 @@ function createTripPointCreateTemplate({state}){
                     <label class="event__label  event__type-output" for="event-destination-1">
                       ${type}
                     </label>
-                    <input class="event__input  event__input--destination" id="event-destination-1" type="number" name="event-destination" value="${cityInformation.cityName}" list="destination-list-1" required autocomplete="off">
+                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${cityInformation.cityName}" list="destination-list-1" required autocomplete="off">
                     <datalist id="destination-list-1">
                       ${destinationElement}
                     </datalist>
