@@ -3,7 +3,7 @@ import BoardPresenter from './presenter/board-presenter.js';
 import FilterPresenter from './presenter/filter-presenter.js';
 import NewEventButtonView from './view/new-event-button.js';
 
-import {render, RenderPosition} from './framework/render.js';
+import {render, RenderPosition, remove} from './framework/render.js';
 
 
 import MockService from './server/mock-service.js';
@@ -49,6 +49,9 @@ function handleNewEventFormClose() {
 }
 
 function handleNewEventButtonClick() {
+  // if(newEventButtonComponent){
+  //   remove(newE)
+  // }
   boardPresenter.createPoint();
   newEventButtonComponent.element.disabled = true;
 }

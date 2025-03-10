@@ -30,7 +30,7 @@ export default class NewPointPresenter {
       allOffers:this.#offersModel.get(),
       destinations: this.#destinationModel.get(),
       onSubmitClick: this.#handleFormSubmit,
-      onResetClick: this.#handleResetClick
+      onDeleteClick: this.#handleDeleteClick
     });
 
     render(this.#pointCreateComponent, this.#pointListContainer, RenderPosition.AFTERBEGIN);
@@ -64,6 +64,14 @@ export default class NewPointPresenter {
 
   #handleResetClick = () => {
     this.destroy();
+  };
+
+  #handleDeleteClick = (point) => {
+    this.#handleDataChange(
+      UserAction.DELETE_POINT,
+      UpdateType.MINOR,
+      point,
+    );
   };
 
   #escKeyDownHandler = (evt) => {

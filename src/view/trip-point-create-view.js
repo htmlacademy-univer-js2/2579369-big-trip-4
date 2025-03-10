@@ -77,7 +77,7 @@ function createTripPointCreateTemplate({state}){
                     <label class="event__label  event__type-output" for="event-destination-1">
                       ${type}
                     </label>
-                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${cityInformation.cityName}" list="destination-list-1">
+                    <input class="event__input  event__input--destination" id="event-destination-1" type="number" name="event-destination" value="${cityInformation.cityName}" list="destination-list-1" required autocomplete="off">
                     <datalist id="destination-list-1">
                       ${destinationElement}
                     </datalist>
@@ -137,12 +137,11 @@ export default class TripPointCreateView extends AbstractStatefulView{
   #datepickerStart = null;
   #datepickerEnd = null;
 
-  constructor({point = pointEmpty, onSubmitClick,onResetClick, onDeleteClick, allOffers,destinations}){
+  constructor({point = pointEmpty, onSubmitClick, onDeleteClick, allOffers,destinations}){
     super();
     this._setState(TripPointCreateView.parsePointToState({point}));
 
     this.#onSubmitClick = onSubmitClick;
-    this.#onResetClick = onResetClick;
     this.#onDeleteClick = onDeleteClick;
     this.#destinations = destinations;
     this.#allOffers = allOffers;
@@ -185,6 +184,7 @@ export default class TripPointCreateView extends AbstractStatefulView{
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
     this.element.querySelector('.event__available-offers').addEventListener('change', this.#offersChangeHandler);
     this.element.querySelector('.event__input--price').addEventListener('change', this.#priceChangeHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('blur', this.#destinationInputChange);
 
     this.#setDatepickers();
   }
@@ -202,11 +202,6 @@ export default class TripPointCreateView extends AbstractStatefulView{
 
   static parseStateToPoint = (state) => state.point;
 
-  #resetButtonClickHandler = (evt) => {
-    evt.preventDefault();
-    this.#onResetClick();
-  };
-
   #submitFormHandler = (evt) => {
     evt.preventDefault();
     this.#onSubmitClick(TripPointCreateView.parseStateToPoint(this._state));
@@ -216,6 +211,7 @@ export default class TripPointCreateView extends AbstractStatefulView{
     evt.preventDefault();
     this.#onDeleteClick(TripPointCreateView.parseStateToPoint(this._state));
   };
+
 
   #eventTypeChangeHandler = (evt) => {
 
@@ -231,12 +227,25 @@ export default class TripPointCreateView extends AbstractStatefulView{
   #destinationChangeHandler = (evt) => {
     const selectedDestination = this.#destinations.find((dest) => dest.cityName === evt.target.value);
 
+    if (!selectedDestination) {
+      evt.target.value = '';
+      return;
+    }
+
     this.updateElement({
       point: {
         ...this._state.point,
         cityInformation: selectedDestination,
       },
     });
+  };
+
+  #destinationInputChange = (evt) => {
+    const isValid = this.#destinations.some((dest) => dest.cityName === evt.target.value);
+
+    if (!isValid) {
+      evt.target.value = '';
+    }
   };
 
   #offersChangeHandler = () => {
@@ -263,6 +272,7 @@ export default class TripPointCreateView extends AbstractStatefulView{
       }
     });
   };
+
 
   #dateStartCloseHandler = ([userDate]) => {
     this._setState({
