@@ -14,7 +14,7 @@ function createEventListEmptyTemplate(filterType) {
     <div class="page-body__container">
         <section class="trip-events">
           <h2 class="visually-hidden">Trip events</h2>
-          ${noPointsTextValue}
+          <p class="trip-events__msg">${noPointsTextValue}</p>
         </section>
       </div>
   `;
