@@ -24,18 +24,16 @@ function createTripPointCreateTemplate({state}){
     'Sightseeing',
     'Restaurant'
   ];
-  //console.log(cityInformation);
 
   const TypeElement = eventTypes.map((eventType) => {
     const isChecked = type === eventType ? 'checked' : '';
     return `<div class="event__type-item">
-             <input id="event-type-${eventType.charAt(0).toLowerCase() + eventType.slice(1)}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${eventType}" ${isChecked}>
+             <input id="event-type-${eventType.charAt(0).toLowerCase() + eventType.slice(1)}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${eventType.toLowerCase()}" ${isChecked}>
              <label class="event__type-label  event__type-label--${eventType.charAt(0).toLowerCase() + eventType.slice(1)}" for="event-type-${eventType.charAt(0).toLowerCase() + eventType.slice(1)}-1">${eventType}</label>
             </div>`;
   }).join('');
 
   const availableOffers = allOffers.find((offer) => offer.type.toLowerCase() === type.toLowerCase())?.offers ?? [];
-  //console.log(allOffers);
 
   const OfferSelectorsElement = availableOffers.map((offer) => {
     const isChecked = (offers ?? []).some((offerItem) => offerItem === offer.id) ? 'checked' : '';
@@ -54,7 +52,6 @@ function createTripPointCreateTemplate({state}){
   ).join('');
 
   const destinationItem = destinations.find((dest) => dest.id === cityInformation);
-  //console.log(destinationItem);
   const photoImgElement = (destinationItem?.pictures || []).map((photo) =>
     `<img class="event__photo" src="${photo.src}" alt="${photo.description}">`
   ).join('');
