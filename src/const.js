@@ -1,7 +1,7 @@
 const pointEmpty =
   {
     type: 'Flight',
-    cityInformation:{ cityName: '', description: '', photos: [] },
+    cityInformation:{ name: '', description: '', pictures: [] },
     dateStart:new Date(),
     dateEnd:new Date(),
     cost:'0',

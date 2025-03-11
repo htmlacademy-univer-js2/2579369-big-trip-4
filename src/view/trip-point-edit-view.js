@@ -34,7 +34,8 @@ function createTripPointEditTemplate({state}){
             </div>`;
   }).join('');
 
-  const availableOffers = allOffers.find((offer) => offer.type === type)?.offers ?? [];
+  const availableOffers = allOffers.find((offer) => offer.type.toLowerCase() === type.toLowerCase())?.offers ?? [];
+  //console.log(allOffers);
 
   const OfferSelectorsElement = availableOffers.map((offer) => {
     const isChecked = (offers ?? []).some((offerItem) => offerItem === offer.id) ? 'checked' : '';
@@ -52,7 +53,8 @@ function createTripPointEditTemplate({state}){
     `<option value="${destin.name}"></option>`
   ).join('');
 
-  const destinationItem = destinations.find((dest) => dest.id === point.cityInformation);
+  const destinationItem = destinations.find((dest) => dest.id === cityInformation);
+  //console.log(destinationItem);
   const photoImgElement = (destinationItem?.pictures || []).map((photo) =>
     `<img class="event__photo" src="${photo.src}" alt="${photo.description}">`
   ).join('');
@@ -235,7 +237,7 @@ export default class TripPointEditView extends AbstractStatefulView{
   };
 
   #destinationChangeHandler = (evt) => {
-    const selectedDestination = this.#destinations.find((dest) => dest.cityName === evt.target.value);
+    const selectedDestination = this.#destinations.find((dest) => dest.name === evt.target.value);
 
     if (!selectedDestination) {
       evt.target.value = '';
@@ -245,7 +247,7 @@ export default class TripPointEditView extends AbstractStatefulView{
     this.updateElement({
       point: {
         ...this._state.point,
-        cityInformation: selectedDestination,
+        cityInformation: selectedDestination.id,
       },
     });
   };

@@ -7,8 +7,12 @@ function createTripPointTemplate({point,pointDestination,pointOffers}){
   const {
     type,cost,isFavorite,dateStart,dateEnd, offers
   } = point;
+  const currentTypeOffers = pointOffers.find((offer) => offer.type === type);
 
-  const selectedOffers = pointOffers.filter((offer) => offers.includes(offer.id));
+  const selectedOffers = currentTypeOffers
+    ? currentTypeOffers.offers.filter((offer) => offers.includes(offer.id))
+    : [];
+
   const offerItems = selectedOffers && selectedOffers.length > 0 ?
     selectedOffers.map((offer) =>
       `<li class="event__offer">
