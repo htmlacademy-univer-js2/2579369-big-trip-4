@@ -57,14 +57,8 @@ function handleNewEventButtonClick() {
   boardPresenter.createPoint();
   newEventButtonComponent.element.disabled = true;
 }
-//render(newEventButtonComponent,tripInfoElement);
-
 
 filterPresenter.init();
-// destinationModel.init();
-// offersModel.init();
-// pointModel.init();
-// boardPresenter.init();
 
 async function initApp() {
   await destinationModel.init();
