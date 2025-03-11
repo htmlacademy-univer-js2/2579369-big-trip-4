@@ -4,8 +4,12 @@ import NewEventButtonView from './view/new-event-button.js';
 
 import {render} from './framework/render.js';
 
-
+import PointsApiService from './server/point-api-service.js';
 import MockService from './server/mock-service.js';
+
+const AUTHORUZATION = 'Basic hJ73fS39sxl1ta2p';
+const END_POINT = 'https://21.objects.htmlacademy.pro/big-trip';
+
 import PointModel from './model/point-model.js';
 import OffersModel from './model/offers-model.js';
 import DestinationModel from './model/destination-model.js';
@@ -21,7 +25,9 @@ const siteBodyContainerElement = pageBodyElemnt.querySelector('.page-body__conta
 const mockService = new MockService();
 const destinationModel = new DestinationModel(mockService);
 const offersModel = new OffersModel(mockService);
-const pointModel = new PointModel(mockService);
+const pointModel = new PointModel({
+  service: new PointsApiService(END_POINT,AUTHORUZATION)
+});
 const filterModel = new FilterModel(mockService);
 
 const boardPresenter = new BoardPresenter({
