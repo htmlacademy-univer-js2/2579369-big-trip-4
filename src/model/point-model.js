@@ -1,25 +1,33 @@
 import Observable from '../framework/observable.js';
+import { UpdateType } from '../const.js';
 export default class PointModel extends Observable {
 
   #points = [];
-  #destinationModel = null;
-  #offersModel = null;
   #service = null;
 
-  constructor({service, destinationModel, offersModel}) {
+  constructor({service}) {
     super();
     this.#service = service;
-    this.#destinationModel = destinationModel;
-    this.#offersModel = offersModel;
     //this.#points = this.#service.getPoints();
 
-    this.#service.getPoints.then((points) => {
-      console.log(points.map(this.#adaptToClient));
-    });
+    // this.#service.getPoints.then((points) => {
+    //   console.log(points.map(this.#adaptToClient));
+    // });
   }
 
   get points(){
     return this.#points;
+  }
+
+  async init() {
+    try {
+      const points = await this.#service.getPoints();
+      this.#points = points.map(this.#adaptToClient);
+    } catch(err) {
+      this.#points = [];
+    }
+
+    this._notify(UpdateType.INIT);
   }
 
   updatePoint(updateType,update){

@@ -1,4 +1,4 @@
-import { pointEmpty } from '../mock/point.js';
+import { pointEmpty } from '../const.js';
 import { formatDateTimeLong } from '../utils.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 
