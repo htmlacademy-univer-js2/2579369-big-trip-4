@@ -4,8 +4,11 @@ import NewEventButtonView from './view/new-event-button.js';
 
 import {render} from './framework/render.js';
 
+import PointsApiService from './server/point-api-service.js';
 
-import MockService from './server/mock-service.js';
+const AUTHORUZATION = 'Basic hJ73fS39sxl1ta2p';
+const END_POINT = 'https://21.objects.htmlacademy.pro/big-trip';
+
 import PointModel from './model/point-model.js';
 import OffersModel from './model/offers-model.js';
 import DestinationModel from './model/destination-model.js';
@@ -18,11 +21,13 @@ const filtersBlock = tripInfoElement.querySelector('.trip-controls__filters');
 const pageBodyElemnt = document.querySelector('.page-body__page-main');
 const siteBodyContainerElement = pageBodyElemnt.querySelector('.page-body__container');
 
-const mockService = new MockService();
-const destinationModel = new DestinationModel(mockService);
-const offersModel = new OffersModel(mockService);
-const pointModel = new PointModel(mockService);
-const filterModel = new FilterModel(mockService);
+const pointApiService = new PointsApiService(END_POINT,AUTHORUZATION);
+const destinationModel = new DestinationModel(pointApiService);
+const offersModel = new OffersModel(pointApiService);
+const pointModel = new PointModel({
+  service: pointApiService
+});
+const filterModel = new FilterModel(pointApiService);
 
 const boardPresenter = new BoardPresenter({
   container: siteBodyContainerElement,
@@ -52,8 +57,16 @@ function handleNewEventButtonClick() {
   boardPresenter.createPoint();
   newEventButtonComponent.element.disabled = true;
 }
-render(newEventButtonComponent,tripInfoElement);
-
 
 filterPresenter.init();
-boardPresenter.init();
+
+async function initApp() {
+  await destinationModel.init();
+  await offersModel.init();
+  await pointModel.init().finally(() => {
+    render(newEventButtonComponent, tripInfoElement);
+  });
+  boardPresenter.init();
+}
+initApp();
+

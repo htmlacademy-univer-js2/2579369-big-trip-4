@@ -2,6 +2,7 @@ import TripEventListView from '../view/event-list-view.js';
 import TripSortView from '../view/trip-sort-viev.js';
 import EventListEmptyView from '../view/event-list-empty-view.js';
 import { render, remove } from '../framework/render.js';
+import LoadingView from '../view/loading-view.js';
 import PointPresenter from './point-presenter.js';
 import NewPointPresenter from './new-point-presenter.js';
 import { UpdateType,UserAction } from '../const.js';
@@ -22,6 +23,7 @@ export default class BoardPresenter {
   #sortComponent = new TripSortView();
   #eventListComponent = new TripEventListView();
   #eventListEmptyComponent = null;
+  #loadingComponent = new LoadingView();
 
   #tripInfoComponent = new TripInfoView();
   #tripInfoContainer = null;
@@ -29,6 +31,7 @@ export default class BoardPresenter {
   #pointPresenters = new Map();
   #filterType = FilterType.EVERYTHING;
   #newPointPresenter = null;
+  #isLoading = true;
 
   constructor({container,offersModel,destinationModel,pointModel, filterModel,tripInfoContainer, onNewEventDestroy}) {
     this.#container = container;
@@ -58,7 +61,6 @@ export default class BoardPresenter {
   }
 
   init() {
-    //render(this.#tripInfoComponent,this.#tripInfoContainer,RenderPosition.AFTERBEGIN);
     render(this.#sortComponent, this.#container);
     this.#renderBoard();
   }
@@ -91,6 +93,11 @@ export default class BoardPresenter {
         break;
       case UpdateType.MINOR:
         this.#clearPoints();
+        this.#renderBoard();
+        break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
         this.#renderBoard();
         break;
     }
@@ -129,6 +136,10 @@ export default class BoardPresenter {
     render(this.#tripInfoComponent,this.#tripInfoContainer,RenderPosition.AFTERBEGIN);
   };
 
+  #renderLoading() {
+    render(this.#loadingComponent,this.#eventListComponent.element, RenderPosition.AFTERBEGIN);
+  }
+
   #clearPoints = () => {
     this.#newPointPresenter.destroy();
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
@@ -142,6 +153,8 @@ export default class BoardPresenter {
       remove(this.#eventListEmptyComponent);
       this.#eventListEmptyComponent = null;
     }
+
+    remove(this.#loadingComponent);
   };
 
   #renderNoPoints() {
@@ -165,6 +178,11 @@ export default class BoardPresenter {
     this.#clearPoints();
     if(this.points.length === 0){
       this.#renderNoPoints();
+      return;
+    }
+
+    if(this.#isLoading) {
+      this.#renderLoading();
       return;
     }
 
