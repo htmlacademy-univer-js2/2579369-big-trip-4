@@ -61,5 +61,16 @@ render(newEventButtonComponent,tripInfoElement);
 
 
 filterPresenter.init();
-boardPresenter.init();
-pointModel.init();
+// destinationModel.init();
+// offersModel.init();
+// pointModel.init();
+// boardPresenter.init();
+
+async function initApp() {
+  await destinationModel.init();
+  await offersModel.init();
+  await pointModel.init();
+  boardPresenter.init();
+}
+initApp();
+

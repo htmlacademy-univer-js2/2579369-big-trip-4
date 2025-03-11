@@ -5,11 +5,12 @@ import AbstractView from '../framework/view/abstract-view.js';
 
 function createTripPointTemplate({point,pointDestination,pointOffers}){
   const {
-    type,cost,isFavorite,dateStart,dateEnd
+    type,cost,isFavorite,dateStart,dateEnd, offers
   } = point;
 
-  const offerItems = pointOffers && pointOffers.length > 0 ?
-    pointOffers.map((offer) =>
+  const selectedOffers = pointOffers.filter((offer) => offers.includes(offer.id));
+  const offerItems = selectedOffers && selectedOffers.length > 0 ?
+    selectedOffers.map((offer) =>
       `<li class="event__offer">
       <span class="event__offer-title">${offer.title}</span>
       &plus;&euro;&nbsp;
@@ -28,7 +29,7 @@ function createTripPointTemplate({point,pointDestination,pointOffers}){
                    alt="Event type icon">
                 </div>
                 <h3 class="event__title">
-                ${type} ${pointDestination.cityName}
+                ${type} ${pointDestination.name}
                 </h3>
                 <div class="event__schedule">
                   <p class="event__time">

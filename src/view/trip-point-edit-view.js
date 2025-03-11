@@ -13,7 +13,6 @@ function createTripPointEditTemplate({state}){
   const {
     type,cost,dateStart,dateEnd,offers, cityInformation
   } = point;
-
   const eventTypes = [
     'Taxi',
     'Bus',
@@ -25,6 +24,7 @@ function createTripPointEditTemplate({state}){
     'Sightseeing',
     'Restaurant'
   ];
+  //console.log(cityInformation);
 
   const TypeElement = eventTypes.map((eventType) => {
     const isChecked = type === eventType ? 'checked' : '';
@@ -35,8 +35,9 @@ function createTripPointEditTemplate({state}){
   }).join('');
 
   const availableOffers = allOffers.find((offer) => offer.type === type)?.offers ?? [];
+
   const OfferSelectorsElement = availableOffers.map((offer) => {
-    const isChecked = (offers ?? []).some((offerItem) => offerItem.id === offer.id) ? 'checked' : '';
+    const isChecked = (offers ?? []).some((offerItem) => offerItem === offer.id) ? 'checked' : '';
     return `<div class="event__offer-selector">
               <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.type}-${offer.id}" type="checkbox" name="event-offer-${offer.type}" ${isChecked} data-offer-id="${offer.id}">
               <label class="event__offer-label" for="event-offer-${offer.type}-${offer.id}">
@@ -48,10 +49,11 @@ function createTripPointEditTemplate({state}){
   }).join('');
 
   const destinationElement = destinations.map((destin) =>
-    `<option value="${destin.cityName}"></option>`
+    `<option value="${destin.name}"></option>`
   ).join('');
 
-  const photoImgElement = cityInformation.photos.map((photo) =>
+  const destinationItem = destinations.find((dest) => dest.id === point.cityInformation);
+  const photoImgElement = (destinationItem?.pictures || []).map((photo) =>
     `<img class="event__photo" src="${photo.src}" alt="${photo.description}">`
   ).join('');
 
@@ -77,7 +79,7 @@ function createTripPointEditTemplate({state}){
                     <label class="event__label  event__type-output" for="event-destination-1">
                       ${type}
                     </label>
-                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${cityInformation.cityName}" list="destination-list-1" required autocomplete="off">
+                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationItem.name}" list="destination-list-1" required autocomplete="off">
                     <datalist id="destination-list-1">
                       ${destinationElement}
                     </datalist>
@@ -116,7 +118,7 @@ function createTripPointEditTemplate({state}){
 
                   <section class="event__section  event__section--destination">
                     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-                    <p class="event__destination-description">${cityInformation.description}</p>
+                    <p class="event__destination-description">${destinationItem.description}</p>
 
                     <div class="event__photos-container">
                       <div class="event__photos-tape">
@@ -249,19 +251,15 @@ export default class TripPointEditView extends AbstractStatefulView{
   };
 
   #offersChangeHandler = () => {
-    const checkBoxes = Array.from(this.element.querySelectorAll('.event__offer-checkbox:checked'));
-    const selectedOfferId = checkBoxes.map((element) => (element.dataset.offerId));
-    const availableOffers = this.#allOffers.find((offer) => offer.type === this._state.point.type)?.offers || [];
-
-    const selectedOffers = availableOffers.filter((offer) => selectedOfferId.includes(offer.id));
+    const checkedBoxes = Array.from(this.element.querySelectorAll('.event__offer-checkbox:checked'));
+    const selectedOfferId = checkedBoxes.map((element) => (element.dataset.offerId));
 
     this._setState({
-      point:{
+      point: {
         ...this._state.point,
-        offers:selectedOffers
+        offers: selectedOfferId
       }
     });
-
   };
 
   #priceChangeHandler = (evt) => {
