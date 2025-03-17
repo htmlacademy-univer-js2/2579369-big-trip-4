@@ -38,8 +38,8 @@ export default class PointPresenter {
 
     this.#pointComponent = new TripPointView({
       point: this.#point,
-      pointDestination:this.#destinationModel.getByID(point.cityInformation.id),
-      pointOffers:point.offers,
+      pointDestination:this.#destinationModel.getByID(point.cityInformation),
+      pointOffers:this.#offersModel.get(),
       onEditClick:this.#pointEditClickHandler,
       onFavoriteClick: this.#pointFavoriteClickHandler,
     });
